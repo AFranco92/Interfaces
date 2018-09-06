@@ -1,0 +1,42 @@
+body {
+	background-image: linear-gradient(to left, grey, black);
+	font-family: sans-serif;
+	margin: 0.4%;
+}
+h1 {
+	font-size: 450%;
+	font-weight: bold;
+	color: #33C370;;
+}
+.btn{
+	background-color: #33C370;
+	border-color: white;
+	width: 30%;
+	height: 28%;
+	margin-left: 5.5%;
+	margin-bottom: 2%;
+	border-radius: 45%;
+	color: black;
+	text-align: center;
+ 	box-shadow: 1px 1px 1px #999;
+ 	font-family: verdana;
+ 	font-weight: bold;
+}
+.pic {
+	color: white;
+}
+#canvas {
+	border: 2px solid #00D061;
+}
+.herramienta {
+	margin-left: 5.5%;
+	border-radius: 30%;
+}
+.pencil, .eraser {
+	width: 65%;
+}
+.intensidad {
+	margin-left: 20%;
+   	top: 40%;
+   	transform: rotate(270deg);
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<title>PicEdition</title>
+	</head>
+	<body>
+		<header>
+			<div class="row">
+				<div class="col-md-9 col-xs-9">
+					<h1><span class="pic">Ｐ  Ｉ  Ｃ</span>Ｅ  Ｄ  Ｉ  Ｔ  Ｉ  Ｏ  Ｎ</h1>
+				</div>
+			</div>
+		</header>
+		<div class="row">
+			<div class="col-md-4 col-xs-4">
+				<button type="button" class="btn btn-secondary neg">Negativo</button>
+			  	<button type="button" class="btn btn-secondary bri">Brillo<input class="intensidad" type="range" min="-15" max="15" step="1" value="0"></button>
+			  	<button type="button" class="btn btn-secondary bin">Binarización</button>
+			 	<button type="button" class="btn btn-secondary sep">Sepia</button>
+				<button type="button" class="btn btn-secondary sat">Saturación</button>
+				<button type="button" class="btn btn-secondary det">Det. bordes</button>
+				<button type="button" class="btn btn-secondary byn">B&N</button>
+				<button type="button" class="btn btn-secondary blu">Blur</button>
+			</div>
+			<div class="col-md-4 col-xs-4">
+				<canvas id="canvas" width="430" height="440"/>				
+			</div>
+			<div class="col-md-4 col-xs-4">
+				<button type="button" class="btn btn-secondary herramienta lapiz"><img class="pencil" src="images/pencil.png"></button>
+				<select class="pencilsize">
+			  		<option value="2">2px</option>
+			  		<option value="4">4px</option>
+			  		<option value="6">6px</option>
+			  		<option value="8">8px</option>
+			  		<option value="10">10px</option>
+			  		<option value="12">12px</option>
+			  	</select>
+			  	<select class="pencilcolor">
+			  		<option value="black">Negro</option>
+			  		<option value="red">Rojo</option>
+			  		<option value="blue">Azul</option>
+			  		<option value="yellow">Amarillo</option>
+			  		<option value="green">Verde</option>
+			  		<option value="orange">Naranja</option>
+			  	</select>
+			  	<button type="button" class="btn btn-secondary herramienta goma"><img class="eraser" src="images/eraser.png"></button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 offset-md-4 operaciones">
+				<button class="btn-secondary btn-subir">Subir imagen</button>
+				<a href=""><button class="btn-secondary btn-descargar">Descargar imagen</button></a>
+				<button class="btn-secondary btn-reiniciar">Reiniciar lienzo</button>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/script.js"></script>
+	</body>
+</html>
