@@ -1,12 +1,23 @@
 $(document).ready(function() {
-
-	"use strict";
 	
 	let canvas = document.getElementById("canvas");
 	let ctx = document.getElementById("canvas").getContext("2d");
 	let imagen = new Image();
 
 	crearLienzo();
+
+	function getRed(imageData, x, y) {
+		index = (x + y * imageData.width) * 4;
+		return imageData.data[index+0];
+	}
+	function getGreen(imageData, x, y) {
+		index = (x + y * imageData.width) * 4;
+		return imageData.data[index+1];
+	}
+	function getBlue(imageData, x, y) {
+		index = (x + y * imageData.width) * 4;
+		return imageData.data[index+2];
+	}
 
 	function setPixel(imageData, x, y, r, g, b, a) {
 		let index = (x + y * imageData.width) * 4;
@@ -60,21 +71,9 @@ $(document).ready(function() {
 		let index;
 		for(x = 0; x < imageData.width; x++){
 			for(y = 0; y < imageData.height; y++){
-				function getRed(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+0];
-				}
-				function getGreen(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+1];
-				}
-				function getBlue(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+2];
-				}
-				let r = getRed(imageData, x, y);
-				let g = getGreen(imageData, x, y);
-				let b = getBlue(imageData, x, y);
+				let r = getRed(imageData, x, y, index);
+				let g = getGreen(imageData, x, y, index);
+				let b = getBlue(imageData, x, y, index);
 				imageData.data[index+0] = 255-r;
 				imageData.data[index+1] = 255-g;
 				imageData.data[index+2] = 255-b;
@@ -90,18 +89,6 @@ $(document).ready(function() {
 		let index;
 		for(x = 0; x < imageData.width; x++){
 			for(y = 0; y < imageData.height; y++){
-				function getRed(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+0];
-				}
-				function getGreen(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+1];
-				}
-				function getBlue(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+2];
-				}
 				let r = getRed(imageData, x, y);
 				let g = getGreen(imageData, x, y);
 				let b = getBlue(imageData, x, y);
@@ -121,18 +108,6 @@ $(document).ready(function() {
 		let index;
 		for(x = 0; x < imageData.width; x++){
 			for(y = 0; y < imageData.height; y++){
-				function getRed(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+0];
-				}
-				function getGreen(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+1];
-				}
-				function getBlue(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+2];
-				}
 				let r = getRed(imageData, x, y);
 				let g = getGreen(imageData, x, y);
 				let b = getBlue(imageData, x, y);
@@ -157,18 +132,6 @@ $(document).ready(function() {
 		let index;
 		for(x = 0; x < imageData.width; x++){
 			for(y = 0; y < imageData.height; y++){
-				function getRed(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+0];
-				}
-				function getGreen(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+1];
-				}
-				function getBlue(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+2];
-				}
 				let r = getRed(imageData, x, y);
 				let g = getGreen(imageData, x, y);
 				let b = getBlue(imageData, x, y);
@@ -188,18 +151,6 @@ $(document).ready(function() {
 		let index;
 		for(x = 0; x < imageData.width; x++){
 			for(y = 0; y < imageData.height; y++){
-				function getRed(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+0];
-				}
-				function getGreen(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+1];
-				}
-				function getBlue(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+2];
-				}
 				let r = getRed(imageData, x, y);
 				let g = getGreen(imageData, x, y);
 				let b = getBlue(imageData, x, y);
@@ -218,18 +169,6 @@ $(document).ready(function() {
 		let index;
 		for(x = 0; x < imageData.width; x++){
 			for(y = 0; y < imageData.height; y++){
-				function getRed(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+0];
-				}
-				function getGreen(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+1];
-				}
-				function getBlue(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+2];
-				}
 				let r = getRed(imageData, x, y);
 				let g = getGreen(imageData, x, y);
 				let b = getBlue(imageData, x, y);
@@ -246,18 +185,6 @@ $(document).ready(function() {
 		let index;
 		for(x = 0; x < imageData.width; x++){
 			for(y = 0; y < imageData.height; y++){
-				function getRed(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+0];
-				}
-				function getGreen(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+1];
-				}
-				function getBlue(imageData, x, y) {
-					index = (x + y * imageData.width) * 4;
-					return imageData.data[index+2];
-				}
 				let r = getRed(imageData, x, y);
 				let g = getGreen(imageData, x, y);
 				let b = getBlue(imageData, x, y);
@@ -271,50 +198,65 @@ $(document).ready(function() {
 	});
 
 	$(".blu").click(function() {
+		function blur(imagen, ctx, passes) {
+		  	let i, x, y;
+		  	passes = passes || 4;
+		  	ctx.globalAlpha = 0.01;
+		  	// Loop for each blur pass.
+		  	for (i = 1; i <= passes; i++) {
+		    	for (y = -1; y < 2; y++) {
+		      		for (x = -1; x < 2; x++) {
+		          		ctx.drawImage(imagen, x, y);
+		      		}
+		    	}
+		  	}
+		  ctx.globalAlpha = 1.0;
+		}
+		blur(imagen, ctx);
 	});
 
 	$(".pencilsize, .pencilcolor").hide();
 	$(".lapiz").click(function(event) {
-		$(".pencilsize, .pencilcolor").show();
-		$(".pencilsize, .pencilcolor").change(function() {
-			event.preventDefault();
-			let size = $(".pencilsize").val();
-			let color = $(".pencilcolor").val();
-			canvas.addEventListener("mousedown", down);
-			canvas.addEventListener("mouseup", toggleDraw);
-			canvas.addEventListener("mousemove", function(evt) {
-				let mousepos = getMousePos(canvas, evt);
-				let posx = mousepos.x;
-				let posy = mousepos.y;
-				draw(canvas, posx, posy, color);
-			});
-			function draw(canvas, posx, posy, color) {
-				if(md) {
-					canvas.style.cursor = "pointer";
-					ctx.fillRect(posx, posy, size, size);
-					ctx.fillStyle = color;
-				}
-			}
-		});
-	});
-
-	$(".goma").click(function(event) {
 		event.preventDefault();
+		let eraser;
+		eraser = false;
+		$(".pencilsize, .pencilcolor").show();
+		let size = $(".pencilsize").val();
+		let color = $(".pencilcolor").val();
 		canvas.addEventListener("mousedown", down);
 		canvas.addEventListener("mouseup", toggleDraw);
 		canvas.addEventListener("mousemove", function(evt) {
 			let mousepos = getMousePos(canvas, evt);
 			let posx = mousepos.x;
 			let posy = mousepos.y;
-			erase(canvas, posx, posy, "white");
+			draw(canvas, posx, posy, color);
 		});
-		function erase(canvas, posx, posy, color) {
-			if(md) {
+		function draw(canvas, posx, posy, color) {
+			if(md && eraser == false) {
 				canvas.style.cursor = "pointer";
-				ctx.fillRect(posx, posy, 10, 10);
+				ctx.fillRect(posx, posy, size, size);
 				ctx.fillStyle = color;
 			}
 		}
+		$(".goma").click(function(event) {
+			event.preventDefault();
+			eraser = true;
+			canvas.addEventListener("mousedown", down);
+			canvas.addEventListener("mouseup", toggleDraw);
+			canvas.addEventListener("mousemove", function(evt) {
+				let mousepos = getMousePos(canvas, evt);
+				let posx = mousepos.x;
+				let posy = mousepos.y;
+				erase(canvas, posx, posy, "white");
+			});
+			function erase(canvas, posx, posy, color) {
+				if(md && eraser) {
+					canvas.style.cursor = "pointer";
+					ctx.fillRect(posx, posy, 10, 10);
+					ctx.fillStyle = color;
+				}
+			}
+		});
 	});
 
 	$(".btn-reiniciar").click(function() {
