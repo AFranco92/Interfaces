@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<title>4 en línea</title>
+	</head>
+	<body>
+		<nav class="navbar navbar-dark bg-dark">
+  			<span class="navbar-brand mb-1 h1">4 en línea</span>
+  			<button class="btn">Reiniciar</button>
+		</nav>
+		<div class="container">
+			<div class="row">
+				<div class="col col1">
+					<span class="jugador jugador1">Jugador 1</span>
+					<table class="scoretable">
+						<thead>
+							<th># partida</th>
+							<th>Ganadas</th>
+							<th># fichas</th>
+						</thead>
+						<tbody>
+							<td>0</td>
+							<td>0</td>
+							<td>21</td>
+						</tbody>
+					</table>
+					<span class="ganaste1">¡GANADOR!</span>
+					<canvas id="canvas0" width="250" height="250"></canvas>
+				</div>
+				<div class="col col2">
+					<canvas id="canvas1" width="510" height="580"></canvas>
+				</div>
+				<div class="col col3">
+					<span class="jugador jugador2">Jugador 2</span>
+					<table class="scoretable">
+						<thead>
+							<th># partida</th>
+							<th>Ganadas</th>
+							<th># fichas</th>
+						</thead>
+						<tbody>
+							<td>0</td>
+							<td>0</td>
+							<td>21</td>
+						</tbody>
+					</table>
+					<span class="ganaste2">¡GANADOR!</span>
+					<canvas id="canvas2" width="250" height="250"></canvas>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="js/script.js"></script>
+	</body>
+</html>
