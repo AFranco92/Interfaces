@@ -35,7 +35,7 @@ let ctx2 = canvas2.getContext('2d');
 		ctx1.beginPath();
 		ctx1.arc((canvas1.width/xmaxchips)*row+(xmaxchips*ymaxchips), 
 				(canvas1.height/ymaxchips)*col+(xmaxchips*ymaxchips), 
-				((canvas1.height/chipsize)*0.6), 0, Math.PI*2);
+				34.8, 0, Math.PI*2);
 		ctx1.fill();
 		ctx1.closePath();		
 	}
@@ -54,25 +54,80 @@ let ctx2 = canvas2.getContext('2d');
 		}
 	}
 
-	Chip.prototype.createChips = function(ctx, color1, color2) {
-		for(let i = 0; i < 21; i++) {
-			this.posX = Math.floor(Math.random() * 150)+50;
-			this.posY = Math.floor(Math.random() * 150)+50;
-			let gradient = ctx.createLinearGradient(this.posX-this.radio, this.posY, this.posX+this.radio, this.posY);
-			gradient.addColorStop(0, color1);
-			gradient.addColorStop(1, color2);
-			ctx.fillStyle = gradient;
-			ctx.beginPath();
-			ctx.arc(this.posX, this.posY, this.radio, 0, Math.PI*2);
-			ctx.fill();
-			ctx.closePath();
+	Chip.prototype.generateChip = function(ctx, imagen) {
+		this.posX = Math.floor(Math.random() * 150)+50;
+		this.posY = Math.floor(Math.random() * 150)+50;
+		ctx.beginPath();
+		let image = ctx.createPattern(imagen, 'repeat');
+		ctx.arc(this.posX, this.posY, this.radio, 0, Math.PI*2);
+		ctx.fillStyle = image;
+		ctx.fill();
+		ctx.drawImage(imagen, this.posX - this.radio, this.posY - this.radio, this.radio*2 , this.radio*2.1);
+		ctx.closePath();
+	}
+
+	Chip.prototype.isClicked = function(e) {
+		let cX = e.layerX;
+		let cY = e.layerY;
+		let firstparam = Math.pow((cX-this.posX), 2);
+		let secondparam = Math.pow((cY-this.posY), 2);
+		let distance = Math.sqrt(firstparam+secondparam);
+		console.log("cX: "+cX);
+		console.log("cY: "+cY);
+		console.log("posX: "+this.posX);
+		console.log("posY: "+this.posY);
+		console.log("Distancia: "+distance);
+		if(distance <= this.radio) {
+			alert("Dentro");
 		}
+		else {
+			alert("Fuera");
+		}
+	}
+
+	let createChips = function(size) {
+		let redchip, yellowchip;
+		let redchips = new Array(21);
+		let yellowchips = new Array(21);
+		for(let i = 0; i < 21; i++) {
+			redchip = new Chip(0, 0, size);
+			yellowchip = new Chip(0, 0, size);
+			redchips[i] = redchip.generateChip(ctx0, redchipimage);
+			yellowchips[i] = yellowchip.generateChip(ctx2, yellowchipimage);
+		}
+		canvas0.addEventListener("mousedown", function(e) {
+        	redchip.isClicked(e);
+		})
+		canvas2.addEventListener("mousedown", function (e) {
+        	yellowchip.isClicked(e);
+    	});
 	}
 
 	let board1 = new Board(6, 7, 10);
 	let player1 = new Player();
 	let player2 = new Player();
-	let chipprueba = new Chip(40, 40, (canvas1.height/10)*0.6);
-	chipprueba.createChips(ctx0, 'red', 'black');
-	chipprueba.createChips(ctx2, 'yellow', 'black');
+
+	let redchipimage = new Image();
+	redchipimage.src = './images/redchip.png';
+	let yellowchipimage = new Image();
+	yellowchipimage.src = './images/yellowchip.png';
+
+	redchipimage.onload = function() {
+		createChips(34.8);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });

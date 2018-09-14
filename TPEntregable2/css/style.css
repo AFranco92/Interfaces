@@ -46,6 +46,24 @@ th, td {
 .jugador2 {
 	color: #F1B22C;
 }
+
+.jugador1, .jugador2 {
+  animation-duration: 0.5s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 30%;
+    width: 30%
+  }
+
+  to {
+    margin-left: 0%;
+    width: 100%;
+  }
+}
+
 .scoretable {
 	margin-top: 5%;
 	background-color: #;
