@@ -23,10 +23,24 @@ $(document).ready(function() {
 	}
 
 	Board.prototype.createChips = function() {
-		for(let i = 0; i < 21; i++) {
-			redchip.drawChip(ctx0, redchipimage);
-			yellowchip.drawChip(ctx2, yellowchipimage);
+		let redchip, yellowchip;
+		let redchips = new Array(21);
+		let yellowchips = new Array(21);
+		for(let i = 0; i < 1; i++) {
+			redchip = new Chip(150, 150, 34.8, false);
+			yellowchip = new Chip(150, 150, 34.8, false);
+			redchips[i] = redchip.drawChip(ctx0, redchipimage);
+			yellowchips[i] = yellowchip.drawChip(ctx2, yellowchipimage);
 		}
+		canvas0.addEventListener("mousedown", function(e) {
+        	redchip.clicked(e);
+		})
+		canvas0.addEventListener("mousemove", function(e) {
+        	redchip.moving(e);
+		})
+		canvas0.addEventListener("mouseup", function(e) {
+        	redchip.up(e);
+		})
 	}
 
 	Board.prototype.createBoardMatrix = function(xmaxchips, ymaxchips, chipsize) {
@@ -59,28 +73,18 @@ $(document).ready(function() {
 	}
 
 	class Chip {
-		constructor(posX, posY, radio, draggable, canvas) {
+		constructor(posX, posY, radio, draggable) {
 			this.posX = posX;
 			this.posY = posY;
 			this.radio = radio;
 			this.draggable = draggable;
-
-			canvas.addEventListener("mousedown", function (e) {
-		      	this.clicked(e);
-		    });
-		    canvas.addEventListener("mousemove", function (e) {
-		      	this.moving(e);
-		    });
-		    canvas.addEventListener("mouseup", function(e) {  
-		      	this.up(e);
-		    });
 		}
 	}
 
 	Chip.prototype.drawChip = function (ctx, imagen) {
 		this.radio = 34.8;
-		this.posX = Math.floor(Math.random() * 150)+50;
-		this.posY = Math.floor(Math.random() * 150)+50;
+		//this.posX = Math.floor(Math.random() * 150)+50;
+		//this.posY = Math.floor(Math.random() * 150)+50;
 		ctx.beginPath();
 		let image = ctx.createPattern(imagen, 'repeat');
 		ctx.arc(this.posX, this.posY, this.radio, 0, Math.PI*2);
@@ -101,40 +105,37 @@ $(document).ready(function() {
 		console.log("posX: "+this.posX);
 		console.log("posY: "+this.posY);
 		console.log("Distancia: "+distance);
-		if(distance < this.radio) {
+		if(distance <= this.radio) {
 			this.draggable = true;
 		}
 	}
 
-	Chip.prototype.moving = function (e) {
+	Chip.prototype.moving = function(e) {
       	if(this.draggable) {
-        	let rect = canvas.getBoundingClientRect();
+        	let rect = canvas0.getBoundingClientRect();
         	this.mousepos(e.clientX - rect.left, e.clientY - rect.top);
       	}
     }
 
-    Chip.prototype.up = function (e) {
+    Chip.prototype.up = function(e) {
       	this.draggable = false;
     }
 
     Chip.prototype.mousepos = function(posX, posY) {
-	      ctx.clearRect(0,0, canvas.width, canvas.height);
+	      this.clear();
 	      this.posX = posX;
 	      this.posY = posY;
-	      this.drawChip(ctx, imagen);
+	      this.drawChip(ctx0, redchipimage);
     }
 
-
-
-
+    Chip.prototype.clear = function() {
+      	ctx0.clearRect(0,0, canvas0.width, canvas0.height);
+      	this.drawChip(ctx0, redchipimage);
+    }
 
 	let board1 = new Board(6, 7, 10);
-	let redchip = new Chip(0, 0, 34.8, false, canvas0);
-	let yellowchip = new Chip(0, 0, 34.8, false, canvas2);
-	let redchips = new Array(21);
-	let yellowchips = new Array(21);
-	let player1 = new Player(redchips);
-	let player2 = new Player(yellowchips);
+	let player1 = new Player();
+	let player2 = new Player();
 
 
 	redchipimage.onload = function() {
