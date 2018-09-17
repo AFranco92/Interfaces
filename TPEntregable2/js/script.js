@@ -19,7 +19,9 @@ $(document).ready(function() {
 	let redchips = [];
 	let yellowchips = [];
 
-	let chipsnumber = 2;
+	let chipsnumber = 4;
+
+	let movingred, movingyellow;
 
 	$(".quantredchips, .quantyellowchips").html(chipsnumber);
 
@@ -61,6 +63,11 @@ $(document).ready(function() {
 			});
 			canvas0.addEventListener("mouseup", function(e) {
 	        	redchips[i].redup(e);
+			});
+
+			canvas1.addEventListener("mouseup", function(e) {
+				redchips[i].redchipdropped(e);
+				yellowchips[i].yellowchipdropped(e);
 			});
 
 			canvas2.addEventListener("mousedown", function(e) {
@@ -132,11 +139,6 @@ $(document).ready(function() {
 		let firstparam = Math.pow(cX-this.posX, 2);
 		let secondparam = Math.pow(cY-this.posY, 2);
 		let distance = Math.sqrt(firstparam+secondparam);
-		// console.log("cX: "+cX);
-		// console.log("cY: "+cY);
-		// console.log("posX: "+this.posX);
-		// console.log("posY: "+this.posY);
-		// console.log("Distancia: "+distance);
 		if(distance <= this.radio) {
 			this.draggable = true;
 		}
@@ -145,6 +147,7 @@ $(document).ready(function() {
 	Chip.prototype.redmoving = function(e) {
 		this.drawChips(ctx0, redchipimage);
       	if(this.draggable) {
+      		movingred = true;
         	for (let i = 0; i < chipsnumber; i++) {
           		let rect = canvas0.getBoundingClientRect();
             	ctx0.clearRect(0, 0, canvas0.width, canvas0.height);
@@ -153,6 +156,23 @@ $(document).ready(function() {
         	}
         	this.drawChips(ctx0, redchipimage);
       	}
+    }
+
+	Chip.prototype.redchipdropped = function(e) {
+		if(movingred) {
+			this.drawChip(ctx1, redchipimage);
+	      	if(this.draggable) {
+	        	for (let i = 0; i < chipsnumber; i++) {
+	          		let rect = canvas1.getBoundingClientRect();
+	            	ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+	        		this.redmousepos(e.clientX - rect.left, e.clientY - rect.top);
+	            	break;
+	        	}
+	            board1.createBoardMatrix(6, 7, 10);
+	        	this.drawChip(ctx1, redchipimage);
+	        	this.draggable = false;
+	      	}
+	    }  	
     }
 
     Chip.prototype.redup = function(e) {
@@ -172,6 +192,7 @@ $(document).ready(function() {
     Chip.prototype.yellowmoving = function(e) {
 		this.drawChips(ctx2, yellowchipimage);
       	if(this.draggable) {
+      		movingyellow = true;
         	for (let i = 0; i < chipsnumber; i++) {
           		let rect = canvas2.getBoundingClientRect();
             	ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
@@ -180,6 +201,23 @@ $(document).ready(function() {
         	}
         	this.drawChips(ctx2, yellowchipimage);
       	}
+    }
+
+	Chip.prototype.yellowchipdropped = function(e) {
+		if(movingyellow) {
+			this.drawChip(ctx1, yellowchipimage);
+	      	if(this.draggable) {
+	        	for (let i = 0; i < chipsnumber; i++) {
+	          		let rect = canvas1.getBoundingClientRect();
+	            	ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+	        		this.yellowmousepos(e.clientX - rect.left, e.clientY - rect.top);
+	            	break;
+	        	}
+	            board1.createBoardMatrix(6, 7, 10);
+	        	this.drawChip(ctx1, yellowchipimage);
+	        	this.draggable = false;
+	      	}
+	    }
     }
 
     Chip.prototype.yellowup = function(e) {
