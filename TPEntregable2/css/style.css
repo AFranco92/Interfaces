@@ -14,11 +14,11 @@ body {
 	margin-top: 50%;
 }
 #canvas0 {
-	border: solid 2px red;
+	border: solid 4px red;
 	background-color: #E88080;
 }
 #canvas2 {
-	border: solid 2px yellow;
+	border: solid 4px yellow;
 	background-color: #F0D16A;
 }
 th, td {
