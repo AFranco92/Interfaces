@@ -76,20 +76,21 @@ $(document).ready(function() {
 	}
 
 	class Chip {
-		constructor(posX, posY, radio, draggable, vx, vy) {
+		constructor(posX, posY, radio, draggable, vx, vy, color) {
 			this.posX = posX;
 			this.posY = posY;
 			this.radio = radio;
 			this.draggable = draggable;
 			this.vx = vx;
 			this.vy = vy;
+			this.color = color;
 		}
 	}
 
 	Board.prototype.createChips = function() {
 		for(let i = 0; i < chipsnumber; i++) {
-			redchips.push(new Chip((200*i*2)*0.05, (200*i*2)*0.05, 34.8, false, 0, 1));
-			yellowchips.push(new Chip((200*i*2)*0.05, (200*i*2)*0.05, 34.8, false, 0, 1));
+			redchips.push(new Chip((200*i*2)*0.05, (200*i*2)*0.05, 34.8, false, 0, 1, 'red'));
+			yellowchips.push(new Chip((200*i*2)*0.05, (200*i*2)*0.05, 34.8, false, 0, 'yellow'));
 
 			canvas0.addEventListener("mousedown", function(e) {
         		redchips[i].clicked(e);
@@ -148,6 +149,160 @@ $(document).ready(function() {
 		ctx1.closePath();		
 	}
 
+	Board.prototype.checkHorizontallyR = function() {
+		let col = this.boardmatrix[row][col];
+		let counter = 1;
+		while(col < ymaxchips) {
+			while(	this.boardmatrix[row][col+1] != null && 
+					this.boardmatrix[row][col].color == this.boardmatrix[row][col+1].color) {
+				counter++;
+			}
+			if(counter == 4) {
+				alert("¡Ganador!");
+			}
+			col++;
+		}
+		if(counter < 4) {
+			this.checkHorizontallyL();
+		}
+	}
+
+	Board.prototype.checkHorizontallyL = function() {
+		let row = this.boardmatrix[row];
+		let col = this.boardmatrix[col];
+		let counter = 1;
+		while(col >= 0) {
+			while(	this.boardmatrix[row][col-1] != null && 
+					this.boardmatrix[row][col].color == this.boardmatrix[row][col-1].color) {
+				counter++;
+			}
+			if(counter == 4) {
+				alert("¡Ganador!");
+			}
+			col--;
+		}
+		if(counter < 4) {
+			this.checkHorizontallyL();
+		}
+	}
+
+	Board.prototype.checkVerticallyU = function() {
+		let row = this.boardmatrix[row];
+		let col = this.boardmatrix[col];
+		let counter = 1;
+		while(row >= 0) {
+			while(	this.boardmatrix[row-1][col] != null && 
+					this.boardmatrix[row][col].color == this.boardmatrix[row-1][col].color) {
+				counter++;
+			}
+			if(counter == 4) {
+				alert("¡Ganador!");
+			}
+			row--;
+		}
+		if(counter < 4) {
+			this.checkVerticallyD();
+		}
+	}
+
+	Board.prototype.checkVerticallyD = function() {
+		let row = this.boardmatrix[row];
+		let col = this.boardmatrix[col];
+		let counter = 1;
+		while(row < xmaxchips) {
+			while(	this.boardmatrix[row+1][col] != null && 
+					this.boardmatrix[row][col].color == this.boardmatrix[row+1][col].color) {
+				counter++;
+			}
+			if(counter == 4) {
+				alert("¡Ganador!");
+			}
+			row++;
+		}
+	}
+
+	Board.prototype.checkDiagonallyUR = function() {
+		let row = this.boardmatrix[row];
+		let col = this.boardmatrix[col];
+		let counter = 1;
+		while(row >= 0) {
+			while(col < ymaxchips) {
+				while(	this.boardmatrix[row-1][col+1] != null && 
+						this.boardmatrix[row][col].color == this.boardmatrix[row-1][col+1].color) {
+					counter++;
+				}
+				if(counter == 4) {
+					alert("¡Ganador!");
+				}
+				col++;
+			}
+			row--;
+		}
+		if(counter < 4) {
+			this.checkDiagonallyDR();
+		}
+	}
+
+	Board.prototype.checkDiagonallyDL = function() {
+		let row = this.boardmatrix[row];
+		let col = this.boardmatrix[col];
+		let counter = 1;
+		while(row < xmaxchips) {
+			while(col >= 0) {
+				while(	this.boardmatrix[row+1][col-1] != null && 
+						this.boardmatrix[row][col].color == this.boardmatrix[row+1][col-1].color) {
+					counter++;
+				}
+				if(counter == 4) {
+					alert("¡Ganador!");
+				}
+				col--;
+			}
+			row++;
+		}
+	}
+
+	Board.prototype.checkDiagonallyDR = function() {
+		let row = this.boardmatrix[row];
+		let col = this.boardmatrix[col];
+		let counter = 1;
+		while(row < xmaxchips) {
+			while(col < ymaxchips) {
+				while(	this.boardmatrix[row+1][col+1] != null && 
+						this.boardmatrix[row][col].color == this.boardmatrix[row+1][col+1].color) {
+					counter++;
+				}
+				if(counter == 4) {
+					alert("¡Ganador!");
+				}
+				col++;
+			}
+			row++;
+		}
+		if(counter < 4) {
+			this.checkDiagonallyUL();
+		}
+	}
+
+	Board.prototype.checkDiagonallyUL = function() {
+		let row = this.boardmatrix[row];
+		let col = this.boardmatrix[col];
+		let counter = 1;
+		while(row >= 0) {
+			while(col >= 0) {
+				while(	this.boardmatrix[row-1][col-1] != null && 
+						this.boardmatrix[row][col].color == this.boardmatrix[row-1][col-1].color) {
+					counter++;
+				}
+				if(counter == 4) {
+					alert("¡Ganador!");
+				}
+				col--;
+			}
+			row--;
+		}
+	}
+
 	Chip.prototype.drawChip = function (ctx, imagen) {
 		this.radio = 34.8;
 		ctx.beginPath();
@@ -186,6 +341,7 @@ $(document).ready(function() {
 	}
 
 	Chip.prototype.clicked = function(e) {
+		console.log("Color de la ficha: "+this.color);
 		let cX = e.layerX;
 		let cY = e.layerY;
 		let firstparam = Math.pow(cX-this.posX, 2);

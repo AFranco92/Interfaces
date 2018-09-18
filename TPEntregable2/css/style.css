@@ -2,6 +2,15 @@ body {
 	background-image: url("../images/background.jpg");
 	opacity: 0.8;
 }
+@font-face {
+    font-family: carbon;
+    src: url('../fonts/carbonphyber.ttf');
+}
+.welcometitle {
+	font-family: carbon;
+	font-size: 350%;
+	color: #FF2424;
+}
 .welcome {
     background-color:lightgrey;
 }
@@ -119,13 +128,4 @@ th, td {
   	-webkit-background-clip: text;
   	-webkit-text-fill-color: transparent;
   	text-shadow: -1px 0 yellow, 0 2px black, 2px 0 black, 0 -1px yellow;
-}
-@font-face {
-    font-family: carbon;
-    src: url('../fonts/carbonphyber.ttf');
-}
-.welcometitle {
-	font-family: carbon;
-	font-size: 350%;
-	color: #FF2424;
 }
