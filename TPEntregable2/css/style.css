@@ -2,6 +2,41 @@ body {
 	background-image: url("../images/background.jpg");
 	opacity: 0.8;
 }
+.welcome {
+    background-color:lightgrey;
+}
+.torules, .play {
+	border: 2px solid black;
+	border-radius: 20%;
+}
+.torules {
+	background-color: yellow;
+	color: red;
+	font-weight: bolder;
+}
+.ruleslist {
+	margin-top: 2%;
+	margin-right: 4%;
+	margin-bottom: 2%;
+}
+.arrow {
+	font-size: 350%;
+	color: #47473F;
+}
+.tinychip {
+	max-width: 7%;
+}
+.tinychiptable {
+	max-width: 40%;
+}
+.note {
+	font-style: italic;
+}
+.play {
+	background-color: red;
+	color: yellow;
+	font-weight: bolder;	
+}
 #canvas1 {
 	border: solid 2px black;
 	background-color: lightgrey;
@@ -24,6 +59,9 @@ body {
 th, td {
 	border: black solid 1px;
 	border-style: dotted;
+	margin: 2%;
+	font-family: carbon;
+	font-size: 150%;
 }
 .col1, .col3 {
 	font-weight: bold;
@@ -48,7 +86,7 @@ th, td {
 }
 
 .jugador1, .jugador2 {
-  animation-duration: 0.5s;
+  animation-duration: 2.5s;
   animation-name: slidein;
 }
 
@@ -81,4 +119,13 @@ th, td {
   	-webkit-background-clip: text;
   	-webkit-text-fill-color: transparent;
   	text-shadow: -1px 0 yellow, 0 2px black, 2px 0 black, 0 -1px yellow;
+}
+@font-face {
+    font-family: carbon;
+    src: url('../fonts/carbonphyber.ttf');
+}
+.welcometitle {
+	font-family: carbon;
+	font-size: 350%;
+	color: #FF2424;
 }

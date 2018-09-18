@@ -7,19 +7,41 @@
 		<title>4 en línea</title>
 	</head>
 	<body>
+		<audio id="intromusic" autoplay="true" loop="true" src="sounds/intro.mp3"></audio>
 		<nav class="navbar navbar-dark bg-dark">
   			<span class="navbar-brand mb-1 h1">4 en línea</span>
-  			<button class="btn">Reiniciar</button>
+  			<button class="btn restart">Reiniciar</button>
 		</nav>
+		<div class="row welcome">
+			<div class="col-md-6 col-xs-6">
+				<div class="jumbotron">
+					 <h1 class="welcometitle">¡Bienvenido a 4 en línea!</h1>
+					<p>Divertite con este entretenido juego para 2 personas</p>
+					<div class="btn-group" role="group" aria-label="...">
+					  <button type="button" class="btn btn-default torules">Reglas</button>
+					  <button type="button" class="btn btn-default play">Jugar</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xs-6 rules">
+				<ul class="list-group ruleslist">
+				  <li class="list-group-item">Cada jugador tiene un conjunto de fichas (rojas o amarillas)<img class="tinychip" src="images/yellowchip.png"><img class="tinychip" src="images/redchip.png"></li>
+				  <li class="list-group-item">Gana el primero que logra formar una línea de 4</li>
+				  <li class="list-group-item">Esta línea puede ser de forma horizontal, vertical o diagonal</li>
+				  <li class="list-group-item"><span class="arrow"> ⇔ </span><span class="arrow"> ↕ </span><span class="arrow"> ⇖ </span><span class="arrow"> ⇗ </span></li>
+				  <li class="list-group-item note">Nota: Las fichas caen por gravedad, no se puede elegir un lugar en específico para colocarlas</li>
+				</ul>
+			</div>
+		</div>
 		<div class="container">
 			<div class="row">
 				<div class="col col1">
 					<span class="jugador jugador1">Jugador 1</span>
 					<table class="scoretable">
 						<thead>
-							<th># partida</th>
-							<th>Ganadas</th>
-							<th># fichas</th>
+							<th>PARTIDA</th>
+							<th>GANADAS</th>
+							<th><img class="tinychiptable" src="images/redchip.png"></th>
 						</thead>
 						<tbody>
 							<td>0</td>
@@ -37,9 +59,9 @@
 					<span class="jugador jugador2">Jugador 2</span>
 					<table class="scoretable">
 						<thead>
-							<th># partida</th>
-							<th>Ganadas</th>
-							<th># fichas</th>
+							<th>PARTIDA</th>
+							<th>GANADAS</th>
+							<th><img class="tinychiptable" src="images/yellowchip.png"></th>
 						</thead>
 						<tbody>
 							<td>0</td>
@@ -54,6 +76,5 @@
 		</div>
 		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript" src="js/script.js"></script>
-		<script type="text/javascript" src="js/classes.js"></script>
 	</body>
 </html>

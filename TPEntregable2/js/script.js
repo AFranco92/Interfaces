@@ -1,8 +1,11 @@
 $(document).ready(function() {
 
-	$.getScript('js/classes.js');
+	//$.getScript('js/classes.js');
 
 	"use strict";
+
+	let hitsound = new Audio('sounds/hit.mp3');
+	hitsound.loop = false;
 
 	let redchipimage = new Image();
 	redchipimage.src = './images/redchip.png';
@@ -23,13 +26,44 @@ $(document).ready(function() {
 
 	let movingred, movingyellow;
 
+    let intromusic = document.getElementById("intromusic");
+    intromusic.volume = 0.1;
+
+	let gravity = 0.2;
+	let bouncefactor = 0;
+
+	$(".container").hide();
+	$(".restart").hide();
+	$(".rules").hide();
+
+	$(".torules").click(function() {
+		$(".rules").fadeIn(300);		
+	});
+
+	$(".play").click(function() {
+		let vol = 0.1;
+		let interval = 200;
+		let fadeout = setInterval(function() {
+		    if (vol > 0) {
+		      	vol -= 0.05;
+		      	intromusic.volume = vol;
+		    }
+		    else {
+		      	clearInterval(fadeout);
+		    }
+		 }, interval);
+		$(".welcome").fadeOut(300);
+		$(".container, .restart").fadeIn(2300);
+	});
+
 	$(".quantredchips, .quantyellowchips").html(chipsnumber);
 
 	class Board {
-		constructor(xmaxchips, ymaxchips, chipsize) {
+		constructor(xmaxchips, ymaxchips, chipsize, boardmatrix) {
 			this.xmaxchips = xmaxchips;
 			this.ymaxchips = ymaxchips;
 			this.chipsize = chipsize;
+			this.boardmatrix = boardmatrix = new Array(xmaxchips);
 			this.createBoardMatrix(xmaxchips, ymaxchips, chipsize);
 		}
 	}
@@ -42,18 +76,20 @@ $(document).ready(function() {
 	}
 
 	class Chip {
-		constructor(posX, posY, radio, draggable) {
+		constructor(posX, posY, radio, draggable, vx, vy) {
 			this.posX = posX;
 			this.posY = posY;
 			this.radio = radio;
 			this.draggable = draggable;
+			this.vx = vx;
+			this.vy = vy;
 		}
 	}
 
 	Board.prototype.createChips = function() {
 		for(let i = 0; i < chipsnumber; i++) {
-			redchips.push(new Chip((200*i*2)*0.05, (200*i*2)*0.05, 34.8, false));
-			yellowchips.push(new Chip((200*i*2)*0.05, (200*i*2)*0.05, 34.8, false));
+			redchips.push(new Chip((200*i*2)*0.05, (200*i*2)*0.05, 34.8, false, 0, 1));
+			yellowchips.push(new Chip((200*i*2)*0.05, (200*i*2)*0.05, 34.8, false, 0, 1));
 
 			canvas0.addEventListener("mousedown", function(e) {
         		redchips[i].clicked(e);
@@ -62,6 +98,10 @@ $(document).ready(function() {
 	        	redchips[i].redmoving(e);
 			});
 			canvas0.addEventListener("mouseup", function(e) {
+	        	redchips[i].redup(e);
+			});
+
+			canvas0.addEventListener("mouseout", function(e) {
 	        	redchips[i].redup(e);
 			});
 
@@ -87,12 +127,11 @@ $(document).ready(function() {
 
 	}
 
-	Board.prototype.createBoardMatrix = function(xmaxchips, ymaxchips, chipsize) {
-		let boardmatrix = new Array(xmaxchips);
+	Board.prototype.createBoardMatrix = function(xmaxchips, ymaxchips, chipsize, boardmatrix) {
 		for(let row = 0; row < xmaxchips; row++) {
-			boardmatrix[row] = new Array(ymaxchips);
+			this.boardmatrix[row] = new Array(ymaxchips);
 			for(let col = 0; col < ymaxchips+1; col++){
-				boardmatrix[row][col] = this.createHollowChip(xmaxchips, ymaxchips, chipsize, row, col, 'black', '#CDBBBB');
+				this.boardmatrix[row][col] = this.createHollowChip(xmaxchips, ymaxchips, chipsize, row, col, 'black', '#CDBBBB');
 			}
 		}
 	}
@@ -133,6 +172,19 @@ $(document).ready(function() {
 		}
 	}
 
+	Chip.prototype.dropChip = function (ctx, imagen, coldrop, rowdrop) {
+		let posX = coldrop;
+		let posY = 540;
+		this.radio = 34.8;
+		ctx.beginPath();
+		let image = ctx.createPattern(imagen, 'repeat');
+		ctx.arc(posX, posY, this.radio, 0, Math.PI*2);
+		ctx.fillStyle = image;
+		ctx.fill();
+		ctx.closePath();
+		board1.boardmatrix[coldrop][rowdrop] = ctx.drawImage(imagen, posX - this.radio, posY - this.radio, this.radio*2 , this.radio*2.1);
+	}
+
 	Chip.prototype.clicked = function(e) {
 		let cX = e.layerX;
 		let cY = e.layerY;
@@ -159,20 +211,21 @@ $(document).ready(function() {
     }
 
 	Chip.prototype.redchipdropped = function(e) {
+	    let rect = canvas1.getBoundingClientRect();
+	    let rowdrop;
 		if(movingred) {
-			this.drawChip(ctx1, redchipimage);
+	        this.dropChip(ctx1, redchipimage, e.clientX - rect.left, e.clientY - rect.top);
 	      	if(this.draggable) {
 	        	for (let i = 0; i < chipsnumber; i++) {
-	          		let rect = canvas1.getBoundingClientRect();
 	            	ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
 	        		this.redmousepos(e.clientX - rect.left, e.clientY - rect.top);
 	            	break;
 	        	}
 	            board1.createBoardMatrix(6, 7, 10);
-	        	this.drawChip(ctx1, redchipimage);
 	        	this.draggable = false;
 	      	}
-	    }  	
+	      	hitsound.play();
+	    }
     }
 
     Chip.prototype.redup = function(e) {
