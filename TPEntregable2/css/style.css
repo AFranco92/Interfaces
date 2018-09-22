@@ -118,14 +118,14 @@ th, td {
 	margin-top: 5%;
 	background-color: #;
 }
-.ganaste1 {
+.winner1 {
 	font-size: 235%;
 	background: -webkit-linear-gradient(black, red);
   	-webkit-background-clip: text;
   	-webkit-text-fill-color: transparent;
   	text-shadow: -1px 0 red, 0 2px black, 2px 0 black, 0 -1px red;
 }
-.ganaste2 {
+.winner2 {
 	font-size: 235%;
 	background: -webkit-linear-gradient(black, yellow);
   	-webkit-background-clip: text;
