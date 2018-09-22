@@ -46,6 +46,9 @@ body {
 	color: yellow;
 	font-weight: bolder;	
 }
+canvas {
+	cursor: pointer;
+}
 #canvas1 {
 	border: solid 2px black;
 	background-color: lightgrey;

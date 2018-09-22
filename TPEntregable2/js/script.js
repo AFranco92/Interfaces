@@ -22,16 +22,19 @@ $(document).ready(function() {
 	let redchips = [];
 	let yellowchips = [];
 
-	let chipsnumber = 4;
+	let chipsnumber = 1;
 
 	let isthereawinner = false;
 
 	let movingred, movingyellow;
 
-    let intromusic = document.getElementById("intromusic");
-    intromusic.volume = 0.1;
+	let redturn = true;
+	let yellowturn = false;
 
-	$(".container").hide();
+    // let intromusic = document.getElementById("intromusic");
+    // intromusic.volume = 0.1;
+
+	//$(".container").hide();
 	$(".restart").hide();
 	$(".rules").hide();
 
@@ -77,21 +80,19 @@ $(document).ready(function() {
 	}
 
 	class Chip {
-		constructor(posX, posY, radio, draggable, vx, vy, color) {
+		constructor(posX, posY, radio, draggable, colour) {
 			this.posX = posX;
 			this.posY = posY;
 			this.radio = radio;
 			this.draggable = draggable;
-			this.vx = vx;
-			this.vy = vy;
-			this.color = color;
+			this.colour = colour;
 		}
 	}
 
 	Board.prototype.createChips = function() {
 		for(let i = 0; i < chipsnumber; i++) {
-			redchips.push(new Chip((200*i*2)*0.05, (200*i*2)*0.05, 34.8, false, 0, 1, 'red'));
-			yellowchips.push(new Chip((200*i*2)*0.05, (200*i*2)*0.05, 34.8, false, 0, 'yellow'));
+			redchips.push(new Chip((200*i*2)*0.05, (200*i*2)*0.05, 34.8, false, 'red'));
+			yellowchips.push(new Chip((200*i*2)*0.05, (200*i*2)*0.05, 34.8, false, 'yellow'));
 
 			canvas0.addEventListener("mousedown", function(e) {
         		redchips[i].clicked(e);
@@ -129,11 +130,15 @@ $(document).ready(function() {
 
 	}
 
+	Board.prototype.getBoardMatrix = function() {
+		return this.boardmatrix;
+	}
+
 	Board.prototype.createBoardMatrix = function(xmaxchips, ymaxchips, chipsize, boardmatrix) {
-		for(let row = 0; row < xmaxchips; row++) {
-			this.boardmatrix[row] = new Array(ymaxchips);
-			for(let col = 0; col < ymaxchips+1; col++){
-				this.boardmatrix[row][col] = this.createHollowChip(xmaxchips, ymaxchips, chipsize, row, col, 'black', '#CDBBBB');
+		for(let col = 0; col < ymaxchips; col++) {
+			this.boardmatrix[col] = new Array(xmaxchips);
+			for(let row = 0; row < xmaxchips; row++){
+				this.boardmatrix[col][row] = this.createHollowChip(xmaxchips, ymaxchips, chipsize, row, col, 'black', '#CDBBBB');
 			}
 		}
 	}
@@ -150,41 +155,38 @@ $(document).ready(function() {
 		ctx1.closePath();		
 	}
 
-	Board.prototype.checkHorizontallyR = function() {
+	Board.prototype.checkHorizontallyR = function(rowdrop, coldrop) {
 		if(!isthereawinner) {
-			let col = this.boardmatrix[row][col];
 			let counter = 1;
-			while(col < ymaxchips) {
-				while(	this.boardmatrix[row][col+1] != null && 
-						this.boardmatrix[row][col].color == this.boardmatrix[row][col+1].color) {
+			while(coldrop < this.ymaxchips) {
+				while(	this.boardmatrix[rowdrop][coldrop+1] != null && 
+						this.boardmatrix[rowdrop][coldrop] == this.boardmatrix[rowdrop][coldrop+1]) {
 					counter++;
+					if(counter == 4) {
+						alert("¡Ganador!");
+						isthereawinner = true;
+					}
 				}
-				if(counter == 4) {
-					alert("¡Ganador!");
-					isthereawinner = true;
-				}
-				col++;
+				coldrop++;
 			}
 			if(counter < 4) {
-				this.checkHorizontallyL();
+				this.checkHorizontallyL(rowdrop, coldrop);
 			}
 		}
 	}
 
-	Board.prototype.checkHorizontallyL = function() {
-		let row = this.boardmatrix[row];
-		let col = this.boardmatrix[col];
+	Board.prototype.checkHorizontallyL = function(rowdrop, coldrop) {
 		let counter = 1;
-		while(col >= 0) {
-			while(	this.boardmatrix[row][col-1] != null && 
-					this.boardmatrix[row][col].color == this.boardmatrix[row][col-1].color) {
+		while(!isthereawinner && coldrop >= 0) {
+			while(	this.boardmatrix[rowdrop][coldrop-1] != null && 
+					this.boardmatrix[rowdrop][coldrop] == this.boardmatrix[rowdrop][coldrop-1]) {
 				counter++;
 			}
 			if(counter == 4) {
 				alert("¡Ganador!");
 				isthereawinner = true;
 			}
-			col--;
+			coldrop--;
 		}
 	}
 
@@ -317,6 +319,10 @@ $(document).ready(function() {
 		}
 	}
 
+	Chip.prototype.getColour = function() {
+		return this.colour;
+	}
+
 	Chip.prototype.drawChip = function (ctx, imagen) {
 		this.radio = 34.8;
 		ctx.beginPath();
@@ -341,9 +347,9 @@ $(document).ready(function() {
 		}
 	}
 
-	Chip.prototype.dropChip = function (ctx, imagen, coldrop, rowdrop) {
-		let posX = coldrop;
-		let posY = 540;
+	Chip.prototype.dropChip = function (ctx, imagen, rowdrop, coldrop, colour) {
+		let posY = coldrop;
+		let posX = rowdrop;
 		this.radio = 34.8;
 		ctx.beginPath();
 		let image = ctx.createPattern(imagen, 'repeat');
@@ -351,11 +357,19 @@ $(document).ready(function() {
 		ctx.fillStyle = image;
 		ctx.fill();
 		ctx.closePath();
-		board1.boardmatrix[coldrop][rowdrop] = ctx.drawImage(imagen, posX - this.radio, posY - this.radio, this.radio*2 , this.radio*2.1);
+		$(".quant"+colour+"chips").html(chipsnumber-1);
+		let boardmatrix = board1.getBoardMatrix();
+		console.log(rowdrop, coldrop);
+		console.log(boardmatrix);
+		if(boardmatrix[rowdrop][coldrop] == null) {
+			ctx.drawImage(imagen, posX - this.radio, posY - this.radio, this.radio*2 , this.radio*2.1);
+			boardmatrix[rowdrop][coldrop] = new Chip(posX, posY, false, 0, 1, colour);
+			//board1.checkHorizontallyR(rowdrop, coldrop);
+		}
 	}
 
 	Chip.prototype.clicked = function(e) {
-		console.log("Color de la ficha: "+this.color);
+		console.log("Color de la ficha: "+this.colour);
 		let cX = e.layerX;
 		let cY = e.layerY;
 		let firstparam = Math.pow(cX-this.posX, 2);
@@ -370,6 +384,7 @@ $(document).ready(function() {
 		this.drawChips(ctx0, redchipimage);
       	if(this.draggable) {
       		movingred = true;
+      		redturn = true;
         	for (let i = 0; i < chipsnumber; i++) {
           		let rect = canvas0.getBoundingClientRect();
             	ctx0.clearRect(0, 0, canvas0.width, canvas0.height);
@@ -381,10 +396,36 @@ $(document).ready(function() {
     }
 
 	Chip.prototype.redchipdropped = function(e) {
-	    let rect = canvas1.getBoundingClientRect();
-	    let rowdrop;
+		let boardmatrix = board1.getBoardMatrix();
+		let rect = canvas1.getBoundingClientRect();
+		let posY = e.clientX - rect.left;
+		let rowdrop = 6;
+		let coldrop = posY;
+		if(posY > 0 && posY < 85) {
+			coldrop = 0;
+		}
+		if(posY >= 85 && posY < 170) {
+			coldrop = 1;
+		}
+		if(posY >= 170 && posY < 255) {
+			coldrop = 2;
+		}
+		if(posY >= 255 && posY < 340) {
+			coldrop = 3;
+		}
+		if(posY >= 340 && posY < 425) {
+			coldrop = 4;
+		}
+		if(posY >= 425 && posY < 510) {
+			coldrop = 5;
+		}
+		let i = 6;
+		while(i > 0 && boardmatrix[i][coldrop] != null) {
+			i--;
+		}
+		rowdrop = i;
 		if(movingred) {
-	        this.dropChip(ctx1, redchipimage, e.clientX - rect.left, e.clientY - rect.top);
+	        this.dropChip(ctx1, redchipimage, rowdrop, coldrop, 'red');
 	      	if(this.draggable) {
 	        	for (let i = 0; i < chipsnumber; i++) {
 	            	ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
@@ -427,19 +468,19 @@ $(document).ready(function() {
     }
 
 	Chip.prototype.yellowchipdropped = function(e) {
-		if(movingyellow) {
-			this.drawChip(ctx1, yellowchipimage);
+	    let rect = canvas1.getBoundingClientRect();
+		if(yellowturn && movingyellow) {
+	        this.dropChip(ctx1, yellowchipimage, e.clientX - rect.left, e.clientY - rect.top, 'yellow');
 	      	if(this.draggable) {
 	        	for (let i = 0; i < chipsnumber; i++) {
-	          		let rect = canvas1.getBoundingClientRect();
 	            	ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
 	        		this.yellowmousepos(e.clientX - rect.left, e.clientY - rect.top);
 	            	break;
 	        	}
 	            board1.createBoardMatrix(6, 7, 10);
-	        	this.drawChip(ctx1, yellowchipimage);
 	        	this.draggable = false;
 	      	}
+	      	hitsound.play();
 	    }
     }
 
