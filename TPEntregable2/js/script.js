@@ -74,9 +74,10 @@ $(document).ready(function() {
 	}
 
 	class Player {
-		constructor(chipsbundle) {
+		constructor(chipsbundle, turn) {
 			this.chipsbundle = new Array(chipsnumber);
 			this.chipsbundle = chipsbundle;
+			this.turn = turn;
 		}
 	}
 
@@ -105,8 +106,12 @@ $(document).ready(function() {
 	});
 
 	canvas1.addEventListener("mouseup", function(e) {
-		redchip.redchipdropped(e);
-		yellowchip.yellowchipdropped(e);
+		if(redturn) {
+			redchip.redchipdropped(e);
+		}	
+		else {
+			yellowchip.yellowchipdropped(e);
+		}
 	});
 
 	canvas2.addEventListener("mousedown", function(e) {
@@ -126,8 +131,10 @@ $(document).ready(function() {
 		for(let i = 0; i < chipsnumber; i++) {
 			redchips.push(redchip);
 			yellowchips.push(yellowchip);
-			redchips[i].drawChips(ctx0, redchipimage);
-			yellowchips[i].drawChips(ctx2, yellowchipimage);
+		}
+		for(let i = 0; i < chipsnumber; i++) {
+			redchips[i].drawChip(ctx0, redchipimage);
+			yellowchips[i].drawChip(ctx2, yellowchipimage);
 		}
 	}
 
@@ -139,15 +146,13 @@ $(document).ready(function() {
 		for(let col = 0; col < ymaxchips; col++) {
 			this.boardmatrix[col] = new Array(xmaxchips);
 			for(let row = 0; row < xmaxchips; row++){
-				this.boardmatrix[col][row] = this.createHollowChip(xmaxchips, ymaxchips, chipsize, row, col, 'black', '#CDBBBB');
+				this.boardmatrix[col][row] = this.createHollowChip(xmaxchips, ymaxchips, chipsize, row, col, 'lightgrey');
 			}
 		}
 	}
 
-	Board.prototype.createHollowChip = function(xmaxchips, ymaxchips, chipsize, row, col, bordercolor, color) {
+	Board.prototype.createHollowChip = function(xmaxchips, ymaxchips, chipsize, row, col, color) {
 		ctx1.fillStyle = color;
-		ctx1.strokeStyle = bordercolor;
-		ctx1.stroke();
 		ctx1.beginPath();
 		ctx1.arc((canvas1.width/xmaxchips)*row+(xmaxchips*ymaxchips), 
 				(canvas1.height/ymaxchips)*col+(xmaxchips*ymaxchips), 
@@ -344,7 +349,7 @@ $(document).ready(function() {
 			this.radio = 34.8;
 			ctx.beginPath();
 			let image = ctx.createPattern(imagen, 'repeat');
-			ctx.arc(this.posX*i, this.posY*i, this.radio, 0, Math.PI*2);
+			ctx.arc(this.posX, this.posY, this.radio, 0, Math.PI*2);
 			ctx.fillStyle = image;
 			ctx.fill();
 			ctx.closePath();
@@ -413,7 +418,6 @@ $(document).ready(function() {
 	}
 
 	Chip.prototype.clicked = function(e) {
-		console.log("Color de la ficha: "+this.colour);
 		let cX = e.layerX;
 		let cY = e.layerY;
 		let firstparam = Math.pow(cX-this.posX, 2);
@@ -468,7 +472,7 @@ $(document).ready(function() {
 			i--;
 		}
 		rowdrop = i;
-		if(movingred && redturn) {
+		if(movingred && redturn && player1.turn) {
 	        this.dropChip(ctx1, redchipimage, rowdrop, coldrop, 'red');
 	      	if(this.draggable) {
 	        	for (let i = 0; i < chipsnumber; i++) {
@@ -480,10 +484,14 @@ $(document).ready(function() {
 	        	this.draggable = false;
 	      	}
 	      	hitsound.play();
+	      	console.log("Ficha roja colocada");
 	      	$(".quantredchips").html(chipsnumber-1);
 	      	redchipsputted++;
+	      	player1.isNotHisTurn();
 	      	redturn = false;
 	      	yellowturn = true;
+	      	player2.isHisTurn();
+	      	console.log("Turno de amarillas");
 	    }
     }
 
@@ -499,13 +507,14 @@ $(document).ready(function() {
 
     Chip.prototype.redclear = function() {
       	ctx0.clearRect(0, 0, canvas0.width, canvas0.height);
-      	this.drawChips(ctx0, redchipimage);
+      	this.drawChip(ctx0, redchipimage);
    	}
 
     Chip.prototype.yellowmoving = function(e) {
 		this.drawChips(ctx2, yellowchipimage);
       	if(this.draggable) {
       		movingyellow = true;
+      		yellowturn = true;
         	for (let i = 0; i < chipsnumber; i++) {
           		let rect = canvas2.getBoundingClientRect();
             	ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
@@ -545,7 +554,7 @@ $(document).ready(function() {
 			i--;
 		}
 		rowdrop = i;
-		if(movingyellow && yellowturn) {
+		if(movingyellow && yellowturn && player2.turn && yellowchipsputted < redchipsputted) {
 	        this.dropChip(ctx1, yellowchipimage, rowdrop, coldrop, 'yellow');
 	      	if(this.draggable) {
 	        	for (let i = 0; i < chipsnumber; i++) {
@@ -557,10 +566,14 @@ $(document).ready(function() {
 	        	this.draggable = false;
 	      	}
 	      	hitsound.play();
+	      	console.log("Ficha amarilla colocada");
 	      	$(".quantyellowchips").html(chipsnumber-1);
 	      	yellowchipsputted++;
+	      	player2.isNotHisTurn();
 	      	yellowturn = false;
 	      	redturn = true;
+	      	player1.isHisTurn();
+	      	console.log("Turno de rojas");
 	    }
     }
 
@@ -579,11 +592,20 @@ $(document).ready(function() {
       	this.drawChip(ctx2, yellowchipimage);
     }
 
+    Player.prototype.isHisTurn = function() {
+    	return this.turn = true;
+    }
+
+    Player.prototype.isNotHisTurn = function() {
+    	return this.turn = false;
+    }
+
 	let board1 = new Board(6, 7, 10);
 	let player1 = new Player();
 	let player2 = new Player();
+	player1.isHisTurn();
 
-	let redchip = new Chip(canvas0.width/2, canvas0.height/2, 34.8, false, 'red');
+	let redchip = new Chip(canvas0.width/2, canvas0.height/2, 34.8, false, 'red'); 
 	let yellowchip = new Chip(canvas2.width/2, canvas2.height/2, 34.8, false, 'yellow');
 
 	redchipimage.onload = function() {
