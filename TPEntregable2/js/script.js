@@ -106,10 +106,10 @@ $(document).ready(function() {
 	});
 
 	canvas1.addEventListener("mouseup", function(e) {
-		if(redturn) {
+		if(redturn && movingred) {
 			redchip.redchipdropped(e);
 		}	
-		else {
+		else if(yellowturn && movingyellow) {
 			yellowchip.yellowchipdropped(e);
 		}
 	});
@@ -167,7 +167,8 @@ $(document).ready(function() {
 			let counter = 1;
 			while(coldrop >= 0) {
 				if(	this.boardmatrix[rowdrop][coldrop-1] != null && 
-						this.boardmatrix[rowdrop][coldrop].colour == 
+					this.boardmatrix[rowdrop][coldrop] != null &&
+						this.boardmatrix[rowdrop][coldrop].colour === 
 						this.boardmatrix[rowdrop][coldrop-1].colour) {
 					counter++;
 					if(counter == 4) {
@@ -178,6 +179,7 @@ $(document).ready(function() {
 							$(".winner2").html("GANADOR");
 						}
 						isthereawinner = true;
+						console.log("Chequeado horizontalmente L");
 					}
 				}
 				coldrop--;
@@ -185,147 +187,113 @@ $(document).ready(function() {
 		}
 	}
 
-	Board.prototype.checkHorizontallyR = function(rowdrop, coldrop, colour, neighbourcolor) {
-		let counter = 1;
-		while(!isthereawinner && coldrop >= 0) {
-			while(	this.boardmatrix[rowdrop][coldrop-2] != null && 
-					colour == 'red') {
-				counter++;
-			}
-			if(counter == 4) {
-				alert("¡Ganador!");
-				isthereawinner = true;
-			}
-			coldrop--;
-		}
-	}
-
-	Board.prototype.checkVerticallyU = function() {
+	Board.prototype.checkHorizontallyR = function(rowdrop, coldrop) {
 		if(!isthereawinner) {
-			let row = this.boardmatrix[row];
-			let col = this.boardmatrix[col];
+			let colour = this.boardmatrix[rowdrop][coldrop].colour;
 			let counter = 1;
-			while(row >= 0) {
-				while(	this.boardmatrix[row-1][col] != null && 
-						this.boardmatrix[row][col].color == this.boardmatrix[row-1][col].color) {
+			while(coldrop < this.ymaxchips) {
+				if(	this.boardmatrix[rowdrop][coldrop+1] != null && 
+					this.boardmatrix[rowdrop][coldrop] != null &&
+						this.boardmatrix[rowdrop][coldrop].colour === 
+						this.boardmatrix[rowdrop][coldrop+1].colour) {
 					counter++;
+					if(counter == 4) {
+						if(colour == 'red') {
+							$(".winner1").html("GANADOR");
+						}
+						if(colour == 'yellow') {
+							$(".winner2").html("GANADOR");
+						}
+						isthereawinner = true;
+						console.log("Chequeado horizontalmente R");
+					}
 				}
-				if(counter == 4) {
-					alert("¡Ganador!");
-					isthereawinner = true;
-				}
-				row--;
-			}
-			if(counter < 4) {
-				this.checkVerticallyD();
+				coldrop++;
 			}
 		}
 	}
 
-	Board.prototype.checkVerticallyD = function() {
-		let row = this.boardmatrix[row];
-		let col = this.boardmatrix[col];
-		let counter = 1;
-		while(row < xmaxchips) {
-			while(	this.boardmatrix[row+1][col] != null && 
-					this.boardmatrix[row][col].color == this.boardmatrix[row+1][col].color) {
-				counter++;
-			}
-			if(counter == 4) {
-				alert("¡Ganador!");
-				isthereawinner = true;
-			}
-			row++;
-		}
-	}
-
-	Board.prototype.checkDiagonallyUR = function() {
+	Board.prototype.checkVerticallyD = function(rowdrop, coldrop) {
 		if(!isthereawinner) {
-			let row = this.boardmatrix[row];
-			let col = this.boardmatrix[col];
+			let colour = this.boardmatrix[rowdrop][coldrop].colour;
 			let counter = 1;
-			while(row >= 0) {
-				while(col < ymaxchips) {
-					while(	this.boardmatrix[row-1][col+1] != null && 
-							this.boardmatrix[row][col].color == this.boardmatrix[row-1][col+1].color) {
+			while(rowdrop < this.xmaxchips) {
+				if(	this.boardmatrix[rowdrop+1][coldrop] != null &&
+					this.boardmatrix[rowdrop][coldrop] != null &&
+						this.boardmatrix[rowdrop][coldrop].colour === 
+						this.boardmatrix[rowdrop+1][coldrop].colour) {
+					counter++;
+					if(counter == 4) {
+						if(colour == 'red') {
+							$(".winner1").html("GANADOR");
+						}
+						if(colour == 'yellow') {
+							$(".winner2").html("GANADOR");
+						}
+						isthereawinner = true;
+						console.log("Chequeado verticalmente D");
+					}
+				}
+				rowdrop++;
+			}
+		}
+	}
+
+	Board.prototype.checkDiagonallyDL = function(rowdrop, coldrop) {
+		if(!isthereawinner) {
+			let colour = this.boardmatrix[rowdrop][coldrop].colour;
+			let counter = 1;
+			while(coldrop >= 0) {
+				while(rowdrop < this.xmaxchips) {
+					if(	this.boardmatrix[rowdrop+1][coldrop-1] != null &&
+							this.boardmatrix[rowdrop][coldrop] != null &&
+							this.boardmatrix[rowdrop][coldrop].colour === 
+							this.boardmatrix[rowdrop+1][coldrop-1].colour) {
 						counter++;
 					}
 					if(counter == 4) {
-						alert("¡Ganador!");
+						if(colour == 'red') {
+							$(".winner1").html("GANADOR");
+						}
+						if(colour == 'yellow') {
+							$(".winner2").html("GANADOR");
+						}
 						isthereawinner = true;
+						console.log("Chequeado diagonalmente DL");
 					}
-					col++;
+					rowdrop++;
 				}
-				row--;
-			}
-			if(counter < 4) {
-				this.checkDiagonallyDL();
+				coldrop--;
 			}
 		}
 	}
 
-	Board.prototype.checkDiagonallyDL = function() {
-		let row = this.boardmatrix[row];
-		let col = this.boardmatrix[col];
-		let counter = 1;
-		while(row < xmaxchips) {
-			while(col >= 0) {
-				while(	this.boardmatrix[row+1][col-1] != null && 
-						this.boardmatrix[row][col].color == this.boardmatrix[row+1][col-1].color) {
-					counter++;
-				}
-				if(counter == 4) {
-					alert("¡Ganador!");
-					isthereawinner = true;
-				}
-				col--;
-			}
-			row++;
-		}
-	}
-
-	Board.prototype.checkDiagonallyDR = function() {
+	Board.prototype.checkDiagonallyDR = function(rowdrop, coldrop) {
 		if(!isthereawinner) {
-			let row = this.boardmatrix[row];
-			let col = this.boardmatrix[col];
+			let colour = this.boardmatrix[rowdrop][coldrop].colour;
 			let counter = 1;
-			while(row < xmaxchips) {
-				while(col < ymaxchips) {
-					while(	this.boardmatrix[row+1][col+1] != null && 
-							this.boardmatrix[row][col].color == this.boardmatrix[row+1][col+1].color) {
+			while(coldrop < this.ymaxchips) {
+				while(rowdrop < this.xmaxchips) {
+					if(	this.boardmatrix[rowdrop+1][coldrop+1] != null &&
+							this.boardmatrix[rowdrop][coldrop] != null &&
+							this.boardmatrix[rowdrop][coldrop].colour === 
+							this.boardmatrix[rowdrop+1][coldrop+1].colour) {
 						counter++;
 					}
 					if(counter == 4) {
-						alert("¡Ganador!");
+						if(colour == 'red') {
+							$(".winner1").html("GANADOR");
+						}
+						if(colour == 'yellow') {
+							$(".winner2").html("GANADOR");
+						}
 						isthereawinner = true;
+						console.log("Chequeado diagonalmente DR");
 					}
-					col++;
+					rowdrop++;
 				}
-				row++;
+				coldrop++;
 			}
-			if(counter < 4) {
-				this.checkDiagonallyUL();
-			}
-		}
-	}
-
-	Board.prototype.checkDiagonallyUL = function() {
-		let row = this.boardmatrix[row];
-		let col = this.boardmatrix[col];
-		let counter = 1;
-		while(row >= 0) {
-			while(col >= 0) {
-				while(	this.boardmatrix[row-1][col-1] != null && 
-						this.boardmatrix[row][col].color == this.boardmatrix[row-1][col-1].color) {
-					counter++;
-				}
-				if(counter == 4) {
-					alert("¡Ganador!");
-					isthereawinner = true;
-				}
-				col--;
-			}
-			row--;
 		}
 	}
 
@@ -414,6 +382,10 @@ $(document).ready(function() {
 		}
 		if(boardmatrix[rowdrop][coldrop] != null && redchipsputted > 3 || yellowchipsputted > 3) {
 			board1.checkHorizontallyL(rowdrop, coldrop);
+			board1.checkHorizontallyR(rowdrop, coldrop);
+			board1.checkVerticallyD(rowdrop, coldrop);
+			board1.checkDiagonallyDL(rowdrop, coldrop);
+			board1.checkDiagonallyDR(rowdrop, coldrop);
 		}
 	}
 
@@ -444,55 +416,57 @@ $(document).ready(function() {
     }
 
 	Chip.prototype.redchipdropped = function(e) {
-		let boardmatrix = board1.getBoardMatrix();
-		let rect = canvas1.getBoundingClientRect();
-		let posY = e.clientX - rect.left;
-		let rowdrop = 6;
-		let coldrop = posY;
-		if(posY > 0 && posY < 85) {
-			coldrop = 0;
+		if(!isthereawinner) {
+			let boardmatrix = board1.getBoardMatrix();
+			let rect = canvas1.getBoundingClientRect();
+			let posY = e.clientX - rect.left;
+			let rowdrop = 6;
+			let coldrop = posY;
+			if(posY > 0 && posY < 85) {
+				coldrop = 0;
+			}
+			if(posY >= 85 && posY < 170) {
+				coldrop = 1;
+			}
+			if(posY >= 170 && posY < 255) {
+				coldrop = 2;
+			}
+			if(posY >= 255 && posY < 340) {
+				coldrop = 3;
+			}
+			if(posY >= 340 && posY < 425) {
+				coldrop = 4;
+			}
+			if(posY >= 425 && posY < 510) {
+				coldrop = 5;
+			}
+			let i = 6;
+			while(i > 0 && boardmatrix[i][coldrop] != null) {
+				i--;
+			}
+			rowdrop = i;
+			if(movingred && redturn && player1.turn) {
+		        this.dropChip(ctx1, redchipimage, rowdrop, coldrop, 'red');
+		      	if(this.draggable) {
+		        	for (let i = 0; i < chipsnumber; i++) {
+		            	ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+		        		this.redmousepos(e.clientX - rect.left, e.clientY - rect.top);
+		            	break;
+		        	}
+		            board1.createBoardMatrix(6, 7, 10);
+		        	this.draggable = false;
+		      	}
+		      	hitsound.play();
+		      	console.log("Ficha roja colocada");
+		      	$(".quantredchips").html(chipsnumber-1);
+		      	redchipsputted++;
+		      	player1.isNotHisTurn();
+		      	redturn = false;
+		      	yellowturn = true;
+		      	player2.isHisTurn();
+		      	console.log("Turno de amarillas");
+		    }
 		}
-		if(posY >= 85 && posY < 170) {
-			coldrop = 1;
-		}
-		if(posY >= 170 && posY < 255) {
-			coldrop = 2;
-		}
-		if(posY >= 255 && posY < 340) {
-			coldrop = 3;
-		}
-		if(posY >= 340 && posY < 425) {
-			coldrop = 4;
-		}
-		if(posY >= 425 && posY < 510) {
-			coldrop = 5;
-		}
-		let i = 6;
-		while(i > 0 && boardmatrix[i][coldrop] != null) {
-			i--;
-		}
-		rowdrop = i;
-		if(movingred && redturn && player1.turn) {
-	        this.dropChip(ctx1, redchipimage, rowdrop, coldrop, 'red');
-	      	if(this.draggable) {
-	        	for (let i = 0; i < chipsnumber; i++) {
-	            	ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
-	        		this.redmousepos(e.clientX - rect.left, e.clientY - rect.top);
-	            	break;
-	        	}
-	            board1.createBoardMatrix(6, 7, 10);
-	        	this.draggable = false;
-	      	}
-	      	hitsound.play();
-	      	console.log("Ficha roja colocada");
-	      	$(".quantredchips").html(chipsnumber-1);
-	      	redchipsputted++;
-	      	player1.isNotHisTurn();
-	      	redturn = false;
-	      	yellowturn = true;
-	      	player2.isHisTurn();
-	      	console.log("Turno de amarillas");
-	    }
     }
 
     Chip.prototype.redup = function(e) {
@@ -526,55 +500,57 @@ $(document).ready(function() {
     }
 
 	Chip.prototype.yellowchipdropped = function(e) {
-		let boardmatrix = board1.getBoardMatrix();
-		let rect = canvas1.getBoundingClientRect();
-		let posY = e.clientX - rect.left;
-		let rowdrop = 6;
-		let coldrop = posY;
-		if(posY > 0 && posY < 85) {
-			coldrop = 0;
+		if(!isthereawinner) {
+			let boardmatrix = board1.getBoardMatrix();
+			let rect = canvas1.getBoundingClientRect();
+			let posY = e.clientX - rect.left;
+			let rowdrop = 6;
+			let coldrop = posY;
+			if(posY > 0 && posY < 85) {
+				coldrop = 0;
+			}
+			if(posY >= 85 && posY < 170) {
+				coldrop = 1;
+			}
+			if(posY >= 170 && posY < 255) {
+				coldrop = 2;
+			}
+			if(posY >= 255 && posY < 340) {
+				coldrop = 3;
+			}
+			if(posY >= 340 && posY < 425) {
+				coldrop = 4;
+			}
+			if(posY >= 425 && posY < 510) {
+				coldrop = 5;
+			}
+			let i = 6;
+			while(i > 0 && boardmatrix[i][coldrop] != null) {
+				i--;
+			}
+			rowdrop = i;
+			if(movingyellow && yellowturn && player2.turn && yellowchipsputted < redchipsputted) {
+		        this.dropChip(ctx1, yellowchipimage, rowdrop, coldrop, 'yellow');
+		      	if(this.draggable) {
+		        	for (let i = 0; i < chipsnumber; i++) {
+		            	ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+		        		this.yellowmousepos(e.clientX - rect.left, e.clientY - rect.top);
+		            	break;
+		        	}
+		            board1.createBoardMatrix(6, 7, 10);
+		        	this.draggable = false;
+		      	}
+		      	hitsound.play();
+		      	console.log("Ficha amarilla colocada");
+		      	$(".quantyellowchips").html(chipsnumber-1);
+		      	yellowchipsputted++;
+		      	player2.isNotHisTurn();
+		      	yellowturn = false;
+		      	redturn = true;
+		      	player1.isHisTurn();
+		      	console.log("Turno de rojas");
+		    }
 		}
-		if(posY >= 85 && posY < 170) {
-			coldrop = 1;
-		}
-		if(posY >= 170 && posY < 255) {
-			coldrop = 2;
-		}
-		if(posY >= 255 && posY < 340) {
-			coldrop = 3;
-		}
-		if(posY >= 340 && posY < 425) {
-			coldrop = 4;
-		}
-		if(posY >= 425 && posY < 510) {
-			coldrop = 5;
-		}
-		let i = 6;
-		while(i > 0 && boardmatrix[i][coldrop] != null) {
-			i--;
-		}
-		rowdrop = i;
-		if(movingyellow && yellowturn && player2.turn && yellowchipsputted < redchipsputted) {
-	        this.dropChip(ctx1, yellowchipimage, rowdrop, coldrop, 'yellow');
-	      	if(this.draggable) {
-	        	for (let i = 0; i < chipsnumber; i++) {
-	            	ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
-	        		this.yellowmousepos(e.clientX - rect.left, e.clientY - rect.top);
-	            	break;
-	        	}
-	            board1.createBoardMatrix(6, 7, 10);
-	        	this.draggable = false;
-	      	}
-	      	hitsound.play();
-	      	console.log("Ficha amarilla colocada");
-	      	$(".quantyellowchips").html(chipsnumber-1);
-	      	yellowchipsputted++;
-	      	player2.isNotHisTurn();
-	      	yellowturn = false;
-	      	redturn = true;
-	      	player1.isHisTurn();
-	      	console.log("Turno de rojas");
-	    }
     }
 
     Chip.prototype.yellowup = function(e) {
