@@ -133,35 +133,27 @@ $(document).ready(function() {
 	    yellowchip.yellowup(e);
 	});
 
-	Board.prototype.createChips = function() {
-		for(let i = 0; i < chipsnumber; i++) {
-			redchips.push(new Chip(canvas0.width/2, canvas0.height/2, 34.8, false, 'red'));
-			yellowchips.push(new Chip(canvas2.width/2, canvas2.height/2, 34.8, false, 'yellow'));
-			redchips[i].drawChip(ctx0, redchipimage);
-			yellowchips[i].drawChip(ctx2, yellowchipimage);
-		}
-	}
-
 	Board.prototype.getBoardMatrix = function() {
 		return this.boardmatrix;
 	}
 
-	Board.prototype.createBoardMatrix = function(xmaxchips, ymaxchips, chipsize, boardmatrix) {
-		for(let col = 0; col < ymaxchips; col++) {
-			this.boardmatrix[col] = new Array(xmaxchips);
-			for(let row = 0; row < xmaxchips; row++){
-				this.boardmatrix[col][row] = this.createHollowChip(xmaxchips, ymaxchips, chipsize, row, col, 'lightgrey');
+	Board.prototype.createBoardMatrix = function(boardmatrix) {
+		for(let col = 0; col < this.ymaxchips; col++) {
+			this.boardmatrix[col] = new Array(this.xmaxchips);
+			for(let row = 0; row < this.xmaxchips; row++){
+				this.boardmatrix[col][row] = this.createHollowChip(this.xmaxchips, this.ymaxchips, this.chipsize, row, col, 'black', 'lightgrey');
 			}
 		}
 	}
 
-	Board.prototype.createHollowChip = function(xmaxchips, ymaxchips, chipsize, row, col, color) {
+	Board.prototype.createHollowChip = function(xmaxchips, ymaxchips, chipsize, row, col, bordercolor, color) {
 		ctx1.fillStyle = color;
 		ctx1.beginPath();
-		ctx1.lineWidth = 5;
-		ctx1.arc((canvas1.width/xmaxchips)*row+(xmaxchips*ymaxchips), 
-				(canvas1.height/ymaxchips)*col+(xmaxchips*ymaxchips), 
+		ctx1.lineWidth = 7;
+		ctx1.arc((canvas1.width/this.xmaxchips)*row+(this.xmaxchips*this.ymaxchips), 
+				(canvas1.height/this.ymaxchips)*col+(this.xmaxchips*this.ymaxchips), 
 				34.8, 0, Math.PI*2);
+		ctx1.strokeStyle = bordercolor;
 		ctx1.stroke();
 		ctx1.fill();
 		ctx1.closePath();		
@@ -313,28 +305,44 @@ $(document).ready(function() {
 	}
 
 	Chip.prototype.drawChip = function (ctx, imagen) {
-		this.posX = Math.random()*100+75;
-		this.posY = Math.random()*100+75;
-		this.radio = 34.8;
-		ctx.beginPath();
-		let image = ctx.createPattern(imagen, 'repeat');
-		ctx.arc(this.posX, this.posY, this.radio, 0, Math.PI*2);
-		ctx.fillStyle = image;
-		ctx.fill();
-		ctx.closePath();
-		ctx.drawImage(imagen, this.posX - this.radio, this.posY - this.radio, this.radio*2 , this.radio*2.1);
+		ctx.save();
+	    ctx.beginPath();
+	    let image = ctx.createPattern(imagen, 'repeat');
+	    ctx.fillStyle = image;
+	    ctx.fill();
+	    ctx.arc(this.posX, this.posY+20, this.radio+20, 0, Math.PI*2);
+	    ctx.closePath();
+	    ctx.clip();
+	    ctx.drawImage(imagen, this.posX - this.radio, this.posY - this.radio, this.radio*2 , this.radio*2.1);
+	    ctx.beginPath();
+	   	ctx.fillStyle = image;
+	    ctx.fill();
+	    ctx.arc(this.posX, this.posY+20, this.radio+20, 0, Math.PI*2);
+	    ctx.clip();
+	    ctx.closePath();
+	    ctx.restore();
 	}
 
 	Chip.prototype.drawChips = function (ctx, imagen) {
 		for(let i = 0; i < chipsnumber; i++) {
-			this.radio = 34.8;
-			ctx.beginPath();
-			let image = ctx.createPattern(imagen, 'repeat');
-			ctx.arc(this.posX, this.posY, this.radio, 0, Math.PI*2);
-			ctx.fillStyle = image;
-			ctx.fill();
-			ctx.closePath();
-			ctx.drawImage(imagen, this.posX - this.radio, this.posY - this.radio, this.radio*2 , this.radio*2.1);
+			this.posX = Math.random()*100+75;
+			this.posY = Math.random()*100+75;
+			ctx.save();
+		    ctx.beginPath();
+		    let image = ctx.createPattern(imagen, 'repeat');
+		    ctx.fillStyle = image;
+		    ctx.fill();
+		    ctx.arc(this.posX*i, this.posY*i+20, this.radio+20, 0, Math.PI*2);
+		    ctx.closePath();
+		    ctx.clip();
+		    ctx.drawImage(imagen, this.posX - this.radio, this.posY - this.radio, this.radio*2 , this.radio*2.1);
+		    ctx.beginPath();
+		   	ctx.fillStyle = image;
+		    ctx.fill();
+		    ctx.arc(this.posX*i, this.posY*i+20, this.radio+20, 0, Math.PI*2);
+		    ctx.clip();
+		    ctx.closePath();
+		    ctx.restore();
 		}
 	}
 
@@ -380,12 +388,6 @@ $(document).ready(function() {
 			this.posY = 536.42;
 		}
 		this.radio = 34.8;
-		ctx.beginPath();
-		let image = ctx.createPattern(imagen, 'repeat');
-		ctx.arc(this.posX, this.posY, this.radio, 0, Math.PI*2);
-		ctx.fillStyle = image;
-		ctx.fill();
-		ctx.closePath();
 		let boardmatrix = board1.getBoardMatrix();
 		console.log(rowdrop, coldrop);
 		console.log(boardmatrix);
@@ -422,7 +424,7 @@ $(document).ready(function() {
             	ctx0.clearRect(0, 0, canvas0.width, canvas0.height);
         		this.redmousepos(e.clientX - rect.left, e.clientY - rect.top);
         	}
-        	this.drawChips(ctx0, redchipimage);
+        	this.drawChip(ctx0, redchipimage);
       	}
     }
 
@@ -512,7 +514,7 @@ $(document).ready(function() {
         		this.yellowmousepos(e.clientX - rect.left, e.clientY - rect.top);
             	break;
         	}
-        	this.drawChips(ctx2, yellowchipimage);
+        	this.drawChip(ctx2, yellowchipimage);
       	}
     }
 
@@ -605,7 +607,12 @@ $(document).ready(function() {
 	let yellowchip = new Chip(canvas2.width/2, canvas2.height/2, 34.8, false, 'yellow');
 
 	redchipimage.onload = function() {
-		board1.createChips();
+		for(let i = 0; i < chipsnumber; i++) {
+			redchips.push(new Chip(canvas0.width/2, canvas0.height/2, 34.8, false, 'red'));
+			yellowchips.push(new Chip(canvas2.width/2, canvas2.height/2, 34.8, false, 'yellow'));
+			redchips[i].drawChips(ctx0, redchipimage);
+			yellowchips[i].drawChips(ctx2, yellowchipimage);
+		}
 	}
 
 	
