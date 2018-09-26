@@ -14,6 +14,7 @@ $(document).ready(function() {
 	let canvas1 = document.getElementById('canvas1');
 	let canvas2 = document.getElementById('canvas2');
 	let ctx0 = canvas0.getContext('2d');
+	let ctx01 = canvas1.getContext('2d');
 	let ctx1 = canvas1.getContext('2d');
 	let ctx2 = canvas2.getContext('2d');
 
@@ -114,9 +115,11 @@ $(document).ready(function() {
 	canvas1.addEventListener("mouseup", function(e) {
 		if(redturn && movingred) {
 			redchip.redchipdropped(e);
+			redchip.redup(e);
 		}	
 		else if(yellowturn && movingyellow) {
 			yellowchip.yellowchipdropped(e);
+			yellowchip.yellowup(e);
 		}
 	});
 
@@ -325,8 +328,6 @@ $(document).ready(function() {
 
 	Chip.prototype.drawChips = function (ctx, imagen) {
 		for(let i = 0; i < chipsnumber; i++) {
-			this.posX = Math.random()*100+75;
-			this.posY = Math.random()*100+75;
 			ctx.save();
 		    ctx.beginPath();
 		    let image = ctx.createPattern(imagen, 'repeat');
@@ -346,54 +347,62 @@ $(document).ready(function() {
 		}
 	}
 
-	Chip.prototype.dropChip = function (ctx, imagen, rowdrop, coldrop, colour) {
+	Chip.prototype.getPosXToDraw = function(coldrop) {
 		if(coldrop == 0) {
-			this.posX = 42.5;
+			return (canvas1.width/6)/2;
 		}
 		if(coldrop == 1) {
-			this.posX = 127.5;
+			return (canvas1.width/6)/2+(canvas1.width/6);
 		}
 		if(coldrop == 2) {
-			this.posX = 212.5;
+			return (canvas1.width/6)/2+(canvas1.width/6)*2;
 		}
 		if(coldrop == 3) {
-			this.posX = 297.5;
+			return (canvas1.width/6)/2+(canvas1.width/6)*3;
 		}
 		if(coldrop == 4) {
-			this.posX = 382.5;
+			return (canvas1.width/6)/2+(canvas1.width/6)*4;
 		}
 		if(coldrop == 5) {
-			this.posX = 467.5;
+			return (canvas1.width/6)/2+(canvas1.width/6)*5;
 		}
+	}
 
+	Chip.prototype.getPosYToDraw = function(rowdrop) {
 		if(rowdrop == 0) {
-			this.posY = 41.42;
+			return (canvas1.height/7)/2;
 		}
 		if(rowdrop == 1) {
-			this.posY = 123.92;
+			return (canvas1.height/7)/2+(canvas1.height/7);
 		}
 		if(rowdrop == 2) {
-			this.posY = 206.42;
+			return (canvas1.height/7)/2+(canvas1.height/7)*2;
 		}
 		if(rowdrop == 3) {
-			this.posY = 288.92;
+			return (canvas1.height/7)/2+(canvas1.height/7)*3;
 		}
 		if(rowdrop == 4) {
-			this.posY = 371.42;
+			return (canvas1.height/7)/2+(canvas1.height/7)*4;
 		}
 		if(rowdrop == 5) {
-			this.posY = 453.92;
+			return (canvas1.height/7)/2+(canvas1.height/7)*5;
 		}
 		if(rowdrop == 6) {
-			this.posY = 536.42;
+			return (canvas1.height/7)/2+(canvas1.height/7)*6;
 		}
+	}
+
+	Chip.prototype.dropChip = function (ctx, imagen, rowdrop, coldrop, colour) {
+		this.posX = this.getPosXToDraw(coldrop);
+		this.posY = this.getPosYToDraw(rowdrop);
+		console.log(this.posX, this.posY);
 		this.radio = 34.8;
 		let boardmatrix = board1.getBoardMatrix();
 		console.log(rowdrop, coldrop);
 		console.log(boardmatrix);
 		if(boardmatrix[rowdrop][coldrop] == null) {
+			boardmatrix[rowdrop][coldrop] = this.drawChip(ctx, imagen);
 			boardmatrix[rowdrop][coldrop] = new Chip(this.posX, this.posY, this.radio, false, colour);
-			ctx.drawImage(imagen, this.posX - this.radio, this.posY - this.radio, this.radio*2 , this.radio*2.1);
 		}
 		if(boardmatrix[rowdrop][coldrop] != null && redchipsputted > 3 || yellowchipsputted > 3) {
 			board1.checkHorizontallyL(rowdrop, coldrop);
@@ -421,11 +430,33 @@ $(document).ready(function() {
       		redturn = true;
         	for (let i = 0; i < chipsnumber; i++) {
           		let rect = canvas0.getBoundingClientRect();
+          		let rect1 = canvas1.getBoundingClientRect();
             	ctx0.clearRect(0, 0, canvas0.width, canvas0.height);
         		this.redmousepos(e.clientX - rect.left, e.clientY - rect.top);
         	}
         	this.drawChip(ctx0, redchipimage);
       	}
+    }
+
+    Chip.prototype.getColToDrop = function(posY) {
+		if(posY > 0 && posY < 85) {
+			return 0;
+		}
+		if(posY >= 85 && posY < 170) {
+			return 1;
+		}
+		if(posY >= 170 && posY < 255) {
+			return 2;
+		}
+		if(posY >= 255 && posY < 340) {
+			return 3;
+		}
+		if(posY >= 340 && posY < 425) {
+			return 4;
+		}
+		if(posY >= 425 && posY < 510) {
+			return 5;
+		}
     }
 
 	Chip.prototype.redchipdropped = function(e) {
@@ -434,25 +465,7 @@ $(document).ready(function() {
 			let rect = canvas1.getBoundingClientRect();
 			let posY = e.clientX - rect.left;
 			let rowdrop = 6;
-			let coldrop = posY;
-			if(posY > 0 && posY < 85) {
-				coldrop = 0;
-			}
-			if(posY >= 85 && posY < 170) {
-				coldrop = 1;
-			}
-			if(posY >= 170 && posY < 255) {
-				coldrop = 2;
-			}
-			if(posY >= 255 && posY < 340) {
-				coldrop = 3;
-			}
-			if(posY >= 340 && posY < 425) {
-				coldrop = 4;
-			}
-			if(posY >= 425 && posY < 510) {
-				coldrop = 5;
-			}
+			let coldrop = this.getColToDrop(posY);
 			let i = 6;
 			while(i > 0 && boardmatrix[i][coldrop] != null) {
 				i--;
@@ -473,7 +486,6 @@ $(document).ready(function() {
 		      	console.log("Ficha roja colocada");
 		      	$(".quantredchips").html(chipsnumber-1);
 		      	redchipsputted++;
-		      	this.deleteChip(redchips);
 		      	player1.isNotHisTurn();
 		      	redturn = false;
 		      	canvas0.style.webkitAnimationPlayState = "paused";
@@ -485,10 +497,6 @@ $(document).ready(function() {
 		}
     }
 
-    Chip.prototype.deleteChip = function(array) {
-    	array.splice(0, 1);
-    }
-
     Chip.prototype.redup = function(e) {
       	this.draggable = false;
       	this.movingred = false;
@@ -498,11 +506,6 @@ $(document).ready(function() {
 	    this.posX = posX;
 	    this.posY = posY;
     }
-
-    Chip.prototype.redclear = function() {
-      	ctx0.clearRect(0, 0, canvas0.width, canvas0.height);
-      	this.drawChip(ctx0, redchipimage);
-   	}
 
     Chip.prototype.yellowmoving = function(e) {
       	if(this.draggable) {
@@ -563,7 +566,6 @@ $(document).ready(function() {
 		      	console.log("Ficha amarilla colocada");
 		      	$(".quantyellowchips").html(chipsnumber-1);
 		      	yellowchipsputted++;
-		      	this.deleteChip(yellowchips);
 		      	player2.isNotHisTurn();
 		      	yellowturn = false;
 		      	canvas2.style.webkitAnimationPlayState = "paused";
@@ -583,11 +585,6 @@ $(document).ready(function() {
     Chip.prototype.yellowmousepos = function(posX, posY) {
 	      this.posX = posX;
 	      this.posY = posY;
-    }
-
-    Chip.prototype.yellowclear = function() {
-      	ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-      	this.drawChip(ctx2, yellowchipimage);
     }
 
     Player.prototype.isHisTurn = function() {
@@ -614,27 +611,4 @@ $(document).ready(function() {
 			yellowchips[i].drawChips(ctx2, yellowchipimage);
 		}
 	}
-
-	
-
-    // var dx= 4;  
-    // var dy=20;
-    // var y=50;
-    // var x=50;
-    // function draw(){
-    //     ctx1.clearRect(0,0,canvas1.width,canvas1.height);
-    //     ctx1.beginPath();
-    //     ctx1.fillStyle="#FFBAA3";
-    //     ctx1.arc(x,y,40,0,Math.PI*2,true);
-    //     ctx1.closePath();
-    //     ctx1.fill();
-    //     if( x<0 || x>100)
-    //         dx=-dx;
-    //     if( y<0 || y>canvas1.height-50)
-    //         dy=0;
-    //          y+=dy;
-
-    // }
-    // setInterval(draw,10); 
-
 });
