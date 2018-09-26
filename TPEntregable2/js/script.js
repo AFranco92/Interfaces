@@ -17,6 +17,8 @@ $(document).ready(function() {
 	let ctx1 = canvas1.getContext('2d');
 	let ctx2 = canvas2.getContext('2d');
 
+	canvas2.style.webkitAnimationPlayState = "paused";
+
 	let redchips = [];
 	let yellowchips = [];
 
@@ -35,8 +37,12 @@ $(document).ready(function() {
     // let intromusic = document.getElementById("intromusic");
     // intromusic.volume = 0.1;
 
+    $(".restart").click(function() {
+    	window.location.reload();
+    });
+
 	//$(".container").hide();
-	$(".restart").hide();
+	//$(".restart").hide();
 	$(".rules").hide();
 
 	$(".torules").click(function() {
@@ -129,10 +135,8 @@ $(document).ready(function() {
 
 	Board.prototype.createChips = function() {
 		for(let i = 0; i < chipsnumber; i++) {
-			redchips.push(redchip);
-			yellowchips.push(yellowchip);
-		}
-		for(let i = 0; i < chipsnumber; i++) {
+			redchips.push(new Chip(canvas0.width/2, canvas0.height/2, 34.8, false, 'red'));
+			yellowchips.push(new Chip(canvas2.width/2, canvas2.height/2, 34.8, false, 'yellow'));
 			redchips[i].drawChip(ctx0, redchipimage);
 			yellowchips[i].drawChip(ctx2, yellowchipimage);
 		}
@@ -154,9 +158,11 @@ $(document).ready(function() {
 	Board.prototype.createHollowChip = function(xmaxchips, ymaxchips, chipsize, row, col, color) {
 		ctx1.fillStyle = color;
 		ctx1.beginPath();
+		ctx1.lineWidth = 5;
 		ctx1.arc((canvas1.width/xmaxchips)*row+(xmaxchips*ymaxchips), 
 				(canvas1.height/ymaxchips)*col+(xmaxchips*ymaxchips), 
 				34.8, 0, Math.PI*2);
+		ctx1.stroke();
 		ctx1.fill();
 		ctx1.closePath();		
 	}
@@ -179,6 +185,7 @@ $(document).ready(function() {
 							$(".winner2").html("GANADOR");
 						}
 						isthereawinner = true;
+						$("#canvas0, #canvas2").hide();
 						console.log("Chequeado horizontalmente L");
 					}
 				}
@@ -205,6 +212,7 @@ $(document).ready(function() {
 							$(".winner2").html("GANADOR");
 						}
 						isthereawinner = true;
+						$("#canvas0, #canvas2").hide();
 						console.log("Chequeado horizontalmente R");
 					}
 				}
@@ -231,6 +239,7 @@ $(document).ready(function() {
 							$(".winner2").html("GANADOR");
 						}
 						isthereawinner = true;
+						$("#canvas0, #canvas2").hide();
 						console.log("Chequeado verticalmente D");
 					}
 				}
@@ -259,6 +268,7 @@ $(document).ready(function() {
 							$(".winner2").html("GANADOR");
 						}
 						isthereawinner = true;
+						$("#canvas0, #canvas2").hide();
 						console.log("Chequeado diagonalmente DL");
 					}
 					rowdrop++;
@@ -288,6 +298,7 @@ $(document).ready(function() {
 							$(".winner2").html("GANADOR");
 						}
 						isthereawinner = true;
+						$("#canvas0, #canvas2").hide();
 						console.log("Chequeado diagonalmente DR");
 					}
 					rowdrop++;
@@ -302,6 +313,8 @@ $(document).ready(function() {
 	}
 
 	Chip.prototype.drawChip = function (ctx, imagen) {
+		this.posX = Math.random()*100+75;
+		this.posY = Math.random()*100+75;
 		this.radio = 34.8;
 		ctx.beginPath();
 		let image = ctx.createPattern(imagen, 'repeat');
@@ -401,7 +414,6 @@ $(document).ready(function() {
 	}
 
 	Chip.prototype.redmoving = function(e) {
-		this.drawChips(ctx0, redchipimage);
       	if(this.draggable) {
       		movingred = true;
       		redturn = true;
@@ -409,7 +421,6 @@ $(document).ready(function() {
           		let rect = canvas0.getBoundingClientRect();
             	ctx0.clearRect(0, 0, canvas0.width, canvas0.height);
         		this.redmousepos(e.clientX - rect.left, e.clientY - rect.top);
-            	break;
         	}
         	this.drawChips(ctx0, redchipimage);
       	}
@@ -460,13 +471,20 @@ $(document).ready(function() {
 		      	console.log("Ficha roja colocada");
 		      	$(".quantredchips").html(chipsnumber-1);
 		      	redchipsputted++;
+		      	this.deleteChip(redchips);
 		      	player1.isNotHisTurn();
 		      	redturn = false;
+		      	canvas0.style.webkitAnimationPlayState = "paused";
 		      	yellowturn = true;
+		      	canvas2.style.webkitAnimationPlayState = "running";
 		      	player2.isHisTurn();
 		      	console.log("Turno de amarillas");
 		    }
 		}
+    }
+
+    Chip.prototype.deleteChip = function(array) {
+    	array.splice(0, 1);
     }
 
     Chip.prototype.redup = function(e) {
@@ -485,7 +503,6 @@ $(document).ready(function() {
    	}
 
     Chip.prototype.yellowmoving = function(e) {
-		this.drawChips(ctx2, yellowchipimage);
       	if(this.draggable) {
       		movingyellow = true;
       		yellowturn = true;
@@ -544,9 +561,12 @@ $(document).ready(function() {
 		      	console.log("Ficha amarilla colocada");
 		      	$(".quantyellowchips").html(chipsnumber-1);
 		      	yellowchipsputted++;
+		      	this.deleteChip(yellowchips);
 		      	player2.isNotHisTurn();
 		      	yellowturn = false;
+		      	canvas2.style.webkitAnimationPlayState = "paused";
 		      	redturn = true;
+		      	canvas0.style.webkitAnimationPlayState = "running";
 		      	player1.isHisTurn();
 		      	console.log("Turno de rojas");
 		    }
@@ -588,5 +608,26 @@ $(document).ready(function() {
 		board1.createChips();
 	}
 
+	
+
+    // var dx= 4;  
+    // var dy=20;
+    // var y=50;
+    // var x=50;
+    // function draw(){
+    //     ctx1.clearRect(0,0,canvas1.width,canvas1.height);
+    //     ctx1.beginPath();
+    //     ctx1.fillStyle="#FFBAA3";
+    //     ctx1.arc(x,y,40,0,Math.PI*2,true);
+    //     ctx1.closePath();
+    //     ctx1.fill();
+    //     if( x<0 || x>100)
+    //         dx=-dx;
+    //     if( y<0 || y>canvas1.height-50)
+    //         dy=0;
+    //          y+=dy;
+
+    // }
+    // setInterval(draw,10); 
 
 });
