@@ -8,7 +8,6 @@ $(document).ready(function() {
 
 	crearLienzo();
 
-	//$(".intensidad").hide();
 	$(".pencilsize, .pencilcolor, .intensidad, .intensidadsat").hide();
 
 	$(".neg").click(negativo);
@@ -66,9 +65,8 @@ $(document).ready(function() {
 		crearLienzo();
 	});
 
-	$(".btn-subir").click(function() {
-		imagen.src = prompt("Elija la ruta de la imagen"); //Díalogo para cargar la imagen
-		cargarFoto();
+	$("#btn-subir").change(function() {
+		
 	});
 
 	$(".btn-descargar").click(function(event) {
@@ -221,15 +219,6 @@ $(document).ready(function() {
 			ctx.putImageData(imageData, 0, 0);
 		}
 		paintRect(255, 255, 255, 255);
-	}
-
-	function cargarFoto() {
-		imagen.onload = function() {
-			dibujarFoto(this);
-		}
-	}
-	function dibujarFoto(image) {
-		ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, canvas.width, canvas.height);
 	}
 
 	function getRed(imageData, x, y) {

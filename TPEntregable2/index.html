@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<title>4 en línea</title>
+	</head>
+	<body>
+		<audio id="intromusic" autoplay="true" loop="true" src="sounds/intro.mp3"></audio>
+		<nav class="navbar navbar-dark bg-dark">
+ 	  			<div class="dropdown">
+			  		<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			    		Más juegos
+			  		</button>
+			  	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+			  	</div>
+			</div>
+  			<span class="navbar-brand mb-1 h1 title">4 en línea</span>
+
+  			<button class="btn restart">Reiniciar</button>
+		</nav>
+		<div class="row welcome">
+			<div class="col-md-6 col-xs-6">
+				<div class="jumbotron">
+					 <h1 class="welcometitle">¡Bienvenido a 4 en línea!</h1>
+					<p>Divertite con este entretenido juego para 2 personas</p>
+					<div class="btn-group" role="group" aria-label="...">
+					  <button type="button" class="btn btn-default torules">Reglas</button>
+					  <button type="button" class="btn btn-default play">Jugar</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xs-6 rules">
+				<ul class="list-group ruleslist">
+				  <li class="list-group-item">Cada jugador tiene un conjunto de fichas (rojas o amarillas)<img class="tinychip" src="images/yellowchip.png"><img class="tinychip" src="images/redchip.png"></li>
+				  <li class="list-group-item">Gana el primero que logra formar una línea de 4</li>
+				  <li class="list-group-item">Esta línea puede ser de forma horizontal, vertical o diagonal</li>
+				  <li class="list-group-item"><span class="arrow"> ⇔ </span><span class="arrow"> ↕ </span><span class="arrow"> ⇖ </span><span class="arrow"> ⇗ </span></li>
+				  <li class="list-group-item note">Nota: Las fichas caen por gravedad, no se puede elegir un lugar en específico para colocarlas</li>
+				</ul>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col col1">
+					<span class="jugador jugador1">Jugador 1</span>
+					<span class="winner1"></span>
+					<canvas id="canvas0" width="250" height="250"></canvas>
+				</div>
+				<div class="col col2">
+					<canvas id="canvas1" width="510" height="580"></canvas>
+				</div>
+				<div class="col col3">
+					<span class="jugador jugador2">Jugador 2</span>
+					<span class="winner2"></span>
+					<canvas id="canvas2" width="250" height="250"></canvas>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="js/script.js"></script>
+		<script type="text/javascript" src="js/Board.js"></script>
+		<script type="text/javascript" src="js/Player.js"></script>
+		<script type="text/javascript" src="js/Chip.js"></script>
+
+	</body>
+</html>
