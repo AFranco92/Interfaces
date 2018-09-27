@@ -2,6 +2,10 @@ body {
 	background-image: url("../images/background.jpg");
 	opacity: 0.8;
 }
+.title {
+	font-family: carbon;
+	font-size: 150%;
+}
 @font-face {
     font-family: carbon;
     src: url('../fonts/carbonphyber.ttf');
@@ -53,7 +57,7 @@ canvas {
 	border: solid 2px black;
 	background-color: #00FFF0;
 	border-radius: 5%;
-	margin-top: 2%;
+	margin-top: 1%;
 	margin-bottom: 2%;
 }
 #canvas0, #canvas2 {
@@ -80,13 +84,6 @@ canvas {
 	border: solid 4px yellow;
 	background-color: #F0D16A;
 }
-th, td {
-	border: black solid 1px;
-	border-style: dotted;
-	margin: 2%;
-	font-family: carbon;
-	font-size: 150%;
-}
 .col1, .col3 {
 	font-weight: bold;
 	font-size: 120%;
@@ -108,12 +105,10 @@ th, td {
 .jugador2 {
 	color: #F1B22C;
 }
-
 .jugador1, .jugador2 {
   animation-duration: 2.5s;
   animation-name: slidein;
 }
-
 @keyframes slidein {
   from {
     margin-left: 30%;
@@ -125,7 +120,6 @@ th, td {
     width: 100%;
   }
 }
-
 @keyframes pulse_animation {
     0% { transform: scale(1); }
     30% { transform: scale(1); }
@@ -135,11 +129,6 @@ th, td {
     70% { transform: scale(1.10); }
     80% { transform: scale(1); }
     100% { transform: scale(1); }
-}
-
-.scoretable {
-	margin-top: 5%;
-	background-color: #;
 }
 .winner1 {
 	font-size: 235%;
