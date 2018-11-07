@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<meta charset="utf-8">
+		<title>GameCenter | Asteroid evader X-Wing</title>
+	</head>
+	<body>
+		<nav class="navbar navbar-dark bg-dark">
+ 	  		<div class="dropdown">
+			  	<img class="gclogo" src="images/gclogo.png">
+			  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+			  </div>
+		</div>
+  		<img class="shutdown" src="images/shutdown.png">
+		</nav>
+		<div class="row welcome">
+			<div class="col-md-6 col-xs-6">
+				<div class="jumbotron">
+					 <h1 class="welcometitle">¡Bienvenido a Asteroid evader X-Wing!</h1>
+					<p>Si te gusta Star-Wars este juego es para vos.</p>
+					<div class="btn-group" role="group" aria-label="...">
+					  <button type="button" class="btn btn-default tohelp">Ayuda</button>
+					  <button type="button" class="btn btn-default play">Jugar</button>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xs-6 rules">
+				<ul class="list-group helplist">
+				  <li class="list-group-item">Tu nave es la asombrosa X-Wing. Una nave icónica de Star-Wars<img class="tinyship" src="images/xwing.png"></li>
+				  <li class="list-group-item">Para aumentar tu puntaje tenés que esquivar los asteroides que se aproximan <img class="tinyast" src="images/asteroid.png"> usando las flechas izquierda y derecha.</li>
+				  <li class="list-group-item">Si chocás alguno, tu X-Wing se prenderá fuego.</li>
+				  <li class="list-group-item"><span class="arrow">Por suerte contás con R2-D2 que extinguirá el mismo al presionar la barra espaciadora. <img class="tinyr2" src="images/r2d2.png"></li>
+				  <li class="list-group-item note">Si te quedás sin extinguidores y chocás, tu nave explotará y se desintegrará.</li>
+				</ul>
+			</div>
+		</div>
+		<div class="game">
+			<div class="outerspace">
+				<img class="playagain" src="images/restart.png">
+				<div class="shipcontainer">
+					<img id="xwing" src="images/xwing.png">
+				</div>
+				<div class="ast"></div>
+				<div class="ast"></div>
+				<div class="scoreinfo">
+					<p>PUNTAJE: <span class="score"></span></p>
+					<p>EXTINTORES: <span class="extinguishers"></span></p>
+				</div>			
+			</div>
+			<div class="control">
+				<img class="spacebarimg" src="images/spacebar.png">
+			</div>
+			<div class="control extinguisher">
+				<p>EXTINGUIR</p>
+			</div>
+			<div class="control arrows">
+				<img class="arrowsimg" src="images/arrows.png">
+			</div>
+			<div class="highscore">
+				<p>HIGHSCORE: <span class="highscorenumber">0</span></p>
+			</div>
+			<div class="asteroidsbg"></div>
+		</div>
+		<footer>
+			<a href="">Privacidad</a>
+			<a href="">Copyright</a>
+			<div class="netw"><img class="fblogo" src="images/fblogo.png"></div>
+			<div class="netw"><img class="iglogo" src="images/iglogo.png"></div>
+			<div class="netw"><img class="twlogo" src="images/twlogo.png"></div>
+		</footer>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="js/Ship.js"></script>
+		<script type="text/javascript" src="js/Asteroid.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>
+	</body>
+</html>
