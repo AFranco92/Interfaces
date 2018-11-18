@@ -1,0 +1,111 @@
+body {
+	background-image: url("../images/background.jpg");
+	background-size: auto;
+}
+header {
+	padding: 1%;
+	height: 101px;
+	background-color: #232323;
+}
+footer {
+	height: 101px;
+	background-color: #232323;
+}
+.gclogo {
+	max-width: 25%;
+}
+.useravatar {
+	margin-top: -1.5%;
+	margin-left: 70%;
+	max-width: 6%;
+}
+.shutdown {
+	margin-top: -1%;
+	max-width: 4%;
+}
+.recomm {
+	margin-top: 4%;
+	margin-left: 4%;
+	background-color: #303030;
+	width: 771px;
+	height: 463px;
+	opacity: 0.8;
+}
+.lastplayed {
+	margin-left: -17%;
+	margin-top: 8.5%;
+	background-color: #303030;
+	width: 463px;
+	height: 463px;
+	opacity: 0.8;	
+}
+.desc {
+	background-color: #303030;
+	margin-top: 2.5%;
+	margin-left: 2.7%;
+	margin-right: 2.9%;
+	margin-bottom: 2.5%;
+	width: auto;
+	height: 300px;
+	opacity: 0.8;
+}
+.recommimg {
+	margin-left: 15%;
+	max-width: 70%;
+	height: 350px;
+}
+.recommtitle, .lastplayedtitle, .desctitle {
+	font-family: alegreya;
+	margin: 1%;
+	color: #00a4d3;
+}
+.line {
+	margin-top: -7%;
+	color: #00a4d3;
+}
+.recommtitle, .line, .lastplayedtitle, .desctitle {
+	font-size: 220%;
+}
+.lastplayedline {
+	margin-top: -10.5%;
+	color: #00a4d3;
+	font-size: 220%;
+}
+.lastplayedlist {
+	border-color: #303030;
+}
+.semidark {
+	background-color: #444444;
+	color: white;
+}
+.dark {
+	background-color: #303030;
+	color: white;
+}
+.tinyimg {
+	width: 35px; 
+	height: 35px;
+}
+.search {
+	margin-top: -20%;
+	margin-left: 55%;
+	background-color: #303030;
+	border-color: #303030;
+}
+.filters {
+	padding-left: 25%;
+	padding-right: 25%;
+	margin-top: -32.5%;
+	margin-left: 175%;
+	background-color: #303030;
+	border-color: #303030;	
+}
+.descline {
+	margin-top: -4.5%;
+	color: #00a4d3;
+	font-size: 220%;
+}
+@font-face {
+    font-family: alegreya;
+    src: url('../fonts/alegreyal.otf');
+}
